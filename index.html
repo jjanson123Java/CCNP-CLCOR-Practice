@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CLCOR 350-801 — How Much Do I Know?</title>
+<meta name="description" content="Free chapter-by-chapter practice tests for the CCNP & CCIE Collaboration Core (CLCOR 350-801) exam. Works online, offline, and as an installable app.">
+<meta name="theme-color" content="#0b1220">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CLCOR Practice">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b1220; --panel:#111a2e; --panel2:#16213a; --line:#23304d;
+  --text:#d8deea; --muted:#8b97b0; --accent:#5fa8c9; --accent2:#3f7f9e;
+  --ok:#4cc38a; --okbg:rgba(76,195,138,.10); --bad:#ef6b6b; --badbg:rgba(239,107,107,.10);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 "IBM Plex Sans",system-ui,sans-serif}
+.wrap{max-width:900px;margin:0 auto;padding:32px 20px 80px}
+header h1{font-family:"Source Serif 4",Georgia,serif;font-weight:600;font-size:30px;margin:0 0 4px;letter-spacing:.2px}
+header .sub{color:var(--muted);font-size:14px}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.controls{margin:24px 0;padding:18px;background:var(--panel);border:1px solid var(--line);border-radius:10px;display:flex;flex-wrap:wrap;gap:14px;align-items:end}
+.controls label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em}
+select,button{font:inherit;color:var(--text)}
+select{background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:9px 12px;min-width:340px;max-width:100%}
+.chk{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:14px;padding-bottom:9px}
+button{cursor:pointer;border-radius:7px;border:1px solid var(--line);background:var(--panel2);padding:9px 16px}
+button:hover{border-color:var(--accent2)}
+button.primary{background:var(--accent2);border-color:var(--accent2);color:#fff;font-weight:600}
+button.primary:hover{background:var(--accent)}
+.meta{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px;margin:6px 2px 14px}
+.q{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:14px}
+.q.correct{border-color:rgba(76,195,138,.45)}
+.q.incorrect{border-color:rgba(239,107,107,.45)}
+.qhead{display:flex;gap:12px;align-items:flex-start}
+.qnum{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-size:13px;min-width:34px;padding-top:2px}
+.qtext{font-weight:500;flex:1}
+.qtag{font-size:11px;color:var(--muted);margin-top:3px;font-weight:400}
+.opts{margin:12px 0 0 46px;display:grid;gap:6px}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:7px;border:1px solid transparent;cursor:pointer}
+.opt:hover{background:var(--panel2)}
+.opt input{margin-top:4px;accent-color:var(--accent)}
+.opt .L{font-family:"IBM Plex Mono",monospace;color:var(--muted);min-width:18px}
+.opt.is-right{color:var(--ok);background:var(--okbg);border-color:rgba(76,195,138,.35)}
+.opt.is-right .L{color:var(--ok)}
+.opt.is-wrong{color:var(--bad);background:var(--badbg);border-color:rgba(239,107,107,.35)}
+.opt.is-wrong .L{color:var(--bad)}
+.locked .opt{cursor:default}.locked .opt:hover{background:none}
+.qfoot{margin:10px 0 0 46px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.toggle{font-size:13px;padding:5px 12px;background:transparent}
+.verdict{font-weight:600;font-size:14px}
+.verdict.ok{color:var(--ok)}.verdict.bad{color:var(--bad)}
+.answer{display:none;margin:10px 0 0 46px;padding:10px 14px;border-left:3px solid var(--accent2);background:var(--panel2);border-radius:0 7px 7px 0;font-size:14px}
+.answer.show{display:block}
+.answer b{color:var(--ok)}
+.actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+#results{display:none;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:22px}
+#results h2{font-family:"Source Serif 4",Georgia,serif;font-weight:600;margin:0 0 14px;font-size:22px}
+.score{display:flex;gap:28px;flex-wrap:wrap;align-items:baseline}
+.big{font-family:"Source Serif 4",Georgia,serif;font-size:52px;line-height:1}
+.kv{color:var(--muted);font-size:14px}.kv b{color:var(--text);font-size:18px}
+.bar{height:8px;background:var(--panel2);border-radius:4px;overflow:hidden;margin:16px 0 6px;display:flex}
+.bar .g{background:var(--ok)}.bar .r{background:var(--bad)}.bar .u{background:#4a5672}
+table{width:100%;border-collapse:collapse;margin-top:18px;font-size:14px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+td.num{font-family:"IBM Plex Mono",monospace;text-align:right}
+.pct-ok{color:var(--ok)}.pct-bad{color:var(--bad)}.pct-mid{color:#d9b25f}
+.note{color:var(--muted);font-size:12.5px;margin-top:30px;border-top:1px solid var(--line);padding-top:14px}
+.src{margin-top:8px;font-size:12.5px;color:var(--muted)}
+.src a{color:var(--accent);text-decoration:none}.src a:hover{text-decoration:underline}
+.badge{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:1px 7px;border-radius:4px;margin-right:6px;vertical-align:1px}
+.b-v{background:rgba(76,195,138,.14);color:var(--ok);border:1px solid rgba(76,195,138,.35)}
+.b-c{background:rgba(217,178,95,.12);color:#d9b25f;border:1px solid rgba(217,178,95,.35)}
+.t-cisco{color:#8fc3db}.t-prep{color:#c7a8e8}.t-ref{color:var(--muted)}
+details.verify{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:-8px 0 22px}
+details.verify summary{cursor:pointer;font-weight:600;list-style:none}
+details.verify summary::-webkit-details-marker{display:none}
+details.verify summary::before{content:"▸ ";color:var(--accent)}
+details.verify[open] summary::before{content:"▾ "}
+.vgrid{display:flex;gap:26px;flex-wrap:wrap;margin:14px 0 6px}
+.vgrid .kv b{font-size:20px}
+.verify ul{margin:8px 0 0 18px;padding:0;font-size:13.5px}.verify li{margin-bottom:5px}
+.verify h4{margin:16px 0 4px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:500}
+.srclist{columns:2;column-gap:28px;font-size:12.5px;margin-top:6px}
+.srclist div{break-inside:avoid;margin-bottom:5px}
+.srclist a{color:var(--text);text-decoration:none}.srclist a:hover{color:var(--accent)}
+@media(max-width:700px){.srclist{columns:1}}
+.guide{margin-top:10px;font-size:14px;color:var(--text)}
+.guide a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(95,168,201,.35)}
+.guide a:hover{border-bottom-color:var(--accent)}
+.guide span{color:var(--muted);font-size:12.5px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:16px}
+.toolbar button,.btn{font-size:13px;padding:7px 13px}
+.btn{display:inline-block;border-radius:7px;border:1px solid var(--line);background:var(--panel2);color:var(--text);text-decoration:none}
+.btn:hover{border-color:var(--accent2)}
+#installBtn{display:none}
+.net{font-size:12px;color:var(--muted);margin-left:auto;font-family:"IBM Plex Mono",monospace}
+.help{font-size:14px}.help ol,.help ul{margin:6px 0 0 20px;padding:0}.help li{margin-bottom:6px}
+.help p{margin:6px 0;color:var(--muted)}
+.help code{font-family:"IBM Plex Mono",monospace;background:var(--panel2);padding:1px 5px;border-radius:4px}
+.verdict-big{display:inline-block;font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:22px;letter-spacing:.12em;padding:6px 16px;border-radius:8px;margin-bottom:14px}
+.v-pass{color:var(--ok);background:var(--okbg);border:1px solid rgba(76,195,138,.5)}
+.v-fail{color:var(--bad);background:var(--badbg);border:1px solid rgba(239,107,107,.5)}
+.study{margin-top:18px;padding:14px 16px;border:1px solid rgba(239,107,107,.35);border-radius:8px;background:rgba(239,107,107,.05)}
+.study.ok{border-color:rgba(76,195,138,.35);background:rgba(76,195,138,.05)}
+.study h3{margin:0 0 8px;font-size:15px}
+.study ol{margin:0 0 0 20px;padding:0;font-size:14px}.study li{margin-bottom:4px}
+.study button{margin-top:10px;font-size:13px;padding:6px 12px}
+@media(max-width:600px){select{min-width:0;width:100%}.controls>div{width:100%}.wrap{padding:20px 14px 60px}.opts,.qfoot,.answer{margin-left:0}}
+.empty{color:var(--muted);text-align:center;padding:40px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">Cisco Press · Official Cert Guide, 2nd Ed.</div>
+  <h1>CCNP &amp; CCIE Collaboration Core (CLCOR 350-801)</h1>
+  <div class="sub">How much do I know? — practice tests by chapter</div>
+  <div class="guide">📘 Study guide: <a href="https://learning.oreilly.com/library/view/ccnp-and-ccie/9780138200893/" target="_blank" rel="noopener">CCNP and CCIE Collaboration Core CLCOR 350-801 Official Cert Guide, 2nd Edition — read on O'Reilly Learning</a> <span>(requires an O'Reilly login)</span></div>
+  <div class="toolbar">
+    <button id="helpBtn">How to use</button>
+    <button id="installBtn">Install app</button>
+    <a class="btn" id="dlLink" href="https://github.com/jjanson123Java/CCNP-CLCOR-Practice/raw/main/download/CLCOR-Practice-Offline.zip">Download for offline use</a>
+    <a class="btn" href="https://github.com/jjanson123Java/CCNP-CLCOR-Practice" target="_blank" rel="noopener">GitHub</a>
+    <span id="netStatus" class="net"></span>
+  </div>
+</header>
+
+<details class="verify" id="help">
+<summary>How to use these practice tests</summary>
+<div class="help">
+  <h4>Taking a test</h4>
+  <ol>
+    <li>Pick a test from the <b>Chapter test</b> list. You can choose a single chapter (Ch. 1–34, grouped by book part), <b>All chapters — full exam</b> (all 211 questions), or <b>All chapters — random 50</b>.</li>
+    <li>Optionally tick <b>Shuffle question order</b>, and choose a <b>Pass mark</b> (80% by default).</li>
+    <li>Click <b>Load test</b>. Each question has four answers, A–D. Answer order is shuffled every time you load a test.</li>
+    <li>Use <b>Show answer</b> on any question to see the correct answer, an explanation, and the Cisco document or study site it was checked against. Use <b>Show all answers</b> to study instead of testing.</li>
+    <li>Click <b>Submit test</b>. If any questions are blank you'll be asked to confirm. Correct answers turn <span class="pct-ok">green</span> and wrong picks turn <span class="pct-bad">red</span>.</li>
+  </ol>
+  <h4>Reading your results</h4>
+  <ul>
+    <li>A <b>PASS</b> or <b>FAIL</b> verdict against your chosen pass mark, your score (for example 41/50), and the percentage correct, incorrect and unanswered.</li>
+    <li>For tests that span more than one chapter, a <b>score for each chapter</b> and a <b>Chapters to study</b> list showing every chapter below your pass mark, weakest first.</li>
+    <li>Click <b>Retake</b> to load a fresh, reshuffled version of the same test.</li>
+  </ul>
+  <h4>Practice without internet</h4>
+  <ul>
+    <li><b>Android (Chrome):</b> tap <b>Install app</b> above, or use the ⋮ menu, then <i>Install app</i> or <i>Add to Home screen</i>.</li>
+    <li><b>iPhone / iPad (Safari):</b> tap the Share button, then <i>Add to Home Screen</i>.</li>
+    <li><b>Windows / Mac (Chrome or Edge):</b> click <b>Install app</b>, or the install icon in the address bar. On a Mac with Safari 17 or later, use <i>File → Add to Dock</i>.</li>
+    <li>After it's installed, the app works fully offline. You can also <b>Download for offline use</b> (a ZIP): unzip it and open <code>index.html</code> in any browser, no internet needed.</li>
+  </ul>
+  <h4>About the pass mark</h4>
+  <p>Cisco doesn't publish a fixed passing score for 350-801, and it can change between exam versions. 80% is a sensible readiness target for practice. Raise it to 85–90% if you want a safety margin.</p>
+</div>
+</details>
+
+<div class="controls">
+  <div>
+    <label for="chap">Chapter test</label>
+    <select id="chap"></select>
+  </div>
+  <div>
+    <label for="passMark">Pass mark</label>
+    <select id="passMark" style="min-width:110px">
+      <option value="70">70%</option><option value="75">75%</option><option value="80" selected>80%</option><option value="85">85%</option><option value="90">90%</option>
+    </select>
+  </div>
+  <label class="chk"><input type="checkbox" id="shuffle"> Shuffle question order</label>
+  <button class="primary" id="start">Load test</button>
+</div>
+
+<details class="verify" id="verify"><summary>Answer verification — checked against Cisco docs and 350-801 study sites</summary><div id="vbody"></div></details>
+
+<div id="results"></div>
+<div class="meta" id="meta"></div>
+<div id="quiz"><div class="empty">Choose a chapter and select <b>Load test</b>.</div></div>
+<div class="actions" id="actions" style="display:none">
+  <button id="showAll">Show all answers</button>
+  <button id="reset">Retake</button>
+  <button class="primary" id="submit">Submit test</button>
+</div>
+
+<div class="note">Questions are original practice items written to the topics in each chapter of the guide; they are not copied from the book. Answer order is randomized each time a test is loaded. Each answer shows the Cisco document or study site it was checked against. Not affiliated with or endorsed by Cisco or Cisco Press. Source and downloads: <a style="color:var(--accent)" href="https://github.com/jjanson123Java/CCNP-CLCOR-Practice" target="_blank" rel="noopener">github.com/jjanson123Java/CCNP-CLCOR-Practice</a></div>
+</div>
+
+<script>
+// Format per question: [question, correctAnswer, wrong1, wrong2, wrong3, explanation]
+// Correct answer is listed first here; options are shuffled into A–D at load time.
+const BANK = [
+{n:1,part:"Part I: AV Fundamentals",title:"Introduction to Collaboration",qs:[
+["Which switching method did the traditional PSTN use to connect voice calls?","Circuit switching","Packet switching","Cell switching","Label switching","The PSTN dedicates a fixed circuit end to end for the duration of a call."],
+["Which ITU umbrella standard defined early videoconferencing over ISDN?","H.320","H.323","H.264","G.711","H.320 covers narrowband videoconferencing over ISDN; H.323 later brought it to packet networks."],
+["Which ITU umbrella standard governs multimedia communication over packet-based (IP) networks?","H.323","H.320","H.248","Q.931","H.323 defines audio, video, and data over IP, including gatekeepers, gateways, and MCUs."],
+["What best describes Unified Communications (UC)?","Integrating voice, video, messaging, presence, and conferencing into one consistent user experience","Replacing all voice traffic with email","Running voice and data on separate physical networks","A single vendor's proprietary phone protocol","UC unifies multiple real-time and non-real-time communication methods across devices."],
+["In UC, what does presence indicate?","A user's availability and willingness to communicate","The physical location of a phone in a building","The number of active calls on a gateway","Whether a device has PoE","Presence shares status (available, busy, in a meeting, DND) so others can choose how to reach someone."],
+["Which trend most drove organizations toward cloud collaboration services?","Subscription-based delivery that reduces on-premises infrastructure and speeds feature rollout","The end of IP networking","Mandatory use of analog phones","Decreasing need for remote work","Cloud models shift cost to OpEx and push new features continuously without local upgrades."]
+]},
+{n:2,part:"Part I: AV Fundamentals",title:"Audio Basics",qs:[
+["According to the Nyquist theorem, the sampling rate must be at least:","Twice the highest frequency being sampled","Equal to the highest frequency","Half the highest frequency","Ten times the lowest frequency","Sampling at ≥2× the highest frequency allows faithful reconstruction; 8 kHz covers the ~4 kHz telephony band."],
+["What is the sampling rate used for narrowband telephony codecs like G.711?","8,000 samples per second","16,000 samples per second","44,100 samples per second","48,000 samples per second","Narrowband voice (~300–3400 Hz) is sampled at 8 kHz."],
+["What is the payload bit rate of G.711?","64 kbps","8 kbps","16 kbps","32 kbps","8,000 samples/s × 8 bits per sample = 64 kbps."],
+["What is the payload bit rate of G.729?","8 kbps","64 kbps","24 kbps","128 kbps","G.729 (CS-ACELP) compresses voice to 8 kbps."],
+["Which codec is a wideband codec sampling at 16 kHz while using 64 kbps?","G.722","G.711","G.729","G.723.1","G.722 carries roughly 50–7000 Hz audio at 64 kbps."],
+["What is quantization in analog-to-digital audio conversion?","Assigning each sample a discrete amplitude value","Measuring the frequency of a sound","Compressing packets for transport","Removing echo from a signal","Quantization rounds each sampled amplitude to the nearest step on a fixed scale."],
+["G.711 μ-law is primarily used in which region?","North America and Japan","Europe","Africa","South America only","A-law is used in Europe and most other regions; μ-law in North America and Japan."]
+]},
+{n:3,part:"Part I: AV Fundamentals",title:"Video Basics",qs:[
+["Which color model do cameras and displays use additively to produce color?","RGB","CMYK","HSL","Pantone","Red, green, and blue light combine additively on sensors and displays."],
+["Why does video compression often use YCbCr instead of RGB?","It separates brightness (luma) from color (chroma), so chroma can be subsampled","It eliminates the need for frames","It increases resolution automatically","It removes audio from the stream","The eye is more sensitive to brightness than color, so chroma can be stored at lower resolution (e.g., 4:2:0)."],
+["Which frame type contains a complete image and does not reference other frames?","I-frame","P-frame","B-frame","Delta frame","I-frames (intra-coded) are self-contained; P and B frames reference other frames."],
+["Compared to H.264, H.265 (HEVC) generally provides:","Similar quality at roughly half the bit rate","Twice the bit rate for the same quality","No support for HD","Only audio compression","HEVC improves compression efficiency around 50% over H.264/AVC."],
+["What is the pixel resolution of 1080p?","1920 × 1080","1280 × 720","3840 × 2160","1024 × 768","1080p is Full HD; 720p is 1280×720; 4K UHD is 3840×2160."],
+["In 1080p or 720p, what does the letter 'p' indicate?","Progressive scan","Pixel density","Packetized video","Primary stream","Progressive scan draws every line of each frame; 'i' (interlaced) alternates odd and even lines."],
+["Which of the following is a container format rather than a codec?","MP4","H.264","VP8","H.265","MP4 wraps encoded audio/video streams; H.264, H.265, and VP8 are codecs."]
+]},
+{n:4,part:"Part I: AV Fundamentals",title:"Collaboration Endpoint Components and Environment",qs:[
+["What does acoustic echo cancellation (AEC) do on an endpoint?","Removes far-end audio picked up by the local microphone from the loudspeakers","Amplifies the near-end talker","Converts audio to video","Encrypts the audio stream","AEC prevents remote participants from hearing their own voice returned."],
+["Which room characteristic increases reverberation?","Hard, reflective surfaces such as glass and bare walls","Carpeted floors","Acoustic ceiling tiles","Fabric wall panels","Sound reflects off hard surfaces; soft materials absorb it and reduce reverb."],
+["Color temperature of room lighting is measured in:","Kelvin","Lux","Lumens","Decibels","Kelvin describes how warm or cool light appears; lux measures illuminance."],
+["What does lux measure?","Illuminance — the amount of light falling on a surface","Color temperature","Sound pressure","Display refresh rate","One lux is one lumen per square meter."],
+["A participant sitting in front of a bright window appears as a silhouette. What causes this?","Strong backlighting overpowering light on the face","Too much front lighting","Low audio levels","Incorrect codec selection","The camera exposes for the bright background, leaving the face underexposed."],
+["A cardioid microphone primarily picks up sound from:","The front, rejecting sound from the rear","All directions equally","Only the rear","Only above","The heart-shaped pickup pattern favors the front and rejects rear noise."]
+]},
+{n:5,part:"Part I: AV Fundamentals",title:"Communication Protocols",qs:[
+["A T1 ISDN PRI provides how many bearer (B) channels and signaling (D) channels?","23 B + 1 D","30 B + 1 D","2 B + 1 D","24 B + 0 D","T1 PRI is 23B+D; E1 PRI is 30B+D; BRI is 2B+D."],
+["In H.323, which protocol handles registration, admission, and status with a gatekeeper?","H.225 RAS","H.245","H.239","Q.931 only","RAS (UDP 1719) handles discovery, registration, admission, and bandwidth with the gatekeeper."],
+["Which H.323 protocol performs capability exchange and opens logical media channels?","H.245","H.225 RAS","H.460.18","T.120","H.245 negotiates codecs and opens/closes logical channels."],
+["What is the default port for SIP over TLS?","TCP 5061","UDP 5060","TCP 1720","UDP 1719","SIP uses 5060 for UDP/TCP and 5061 for TLS. TCP 1720 is H.225 call signaling."],
+["Which SIP response indicates the called device is alerting?","180 Ringing","200 OK","486 Busy Here","401 Unauthorized","1xx responses are provisional; 180 means the far end is ringing."],
+["What role does SDP play in a SIP call?","Describes the media session — codecs, IP addresses, and ports — using offer/answer","Encrypts signaling","Registers the endpoint","Translates domain names","SDP is carried in the SIP body to negotiate media parameters."],
+["Which set of standards lets H.323 traverse firewalls by having the inside device keep an outbound connection open?","H.460.18/H.460.19","H.239","H.264","T.38","H.460.18/19 (and Cisco's Assent) enable firewall traversal for H.323 signaling and media."]
+]},
+{n:6,part:"Part I: AV Fundamentals",title:"Cisco Solution for Converged Collaboration",qs:[
+["Which Cisco product is the primary on-premises call control platform?","Cisco Unified Communications Manager (CUCM)","Cisco Unity Connection","Cisco Meeting Server","Cisco Expressway-E","CUCM provides call routing, device registration, and the dial plan."],
+["Which Cisco product provides voicemail and auto-attendant services on-premises?","Cisco Unity Connection","CUCM IM and Presence","Cisco Meeting Server","Cisco Expressway-C","Unity Connection is Cisco's voice messaging platform."],
+["Which product pair provides secure firewall traversal for remote access and B2B calling?","Expressway-C and Expressway-E","CUCM and Unity Connection","IM&P and CUCM","Meeting Server and TMS","Expressway-C sits inside; Expressway-E sits in the DMZ as traversal server."],
+["Which component provides presence and instant messaging for on-prem Jabber clients?","CUCM IM and Presence Service","Unity Connection","Cisco Meeting Server","CUBE","IM&P delivers XMPP-based chat and presence."],
+["Which Cisco product provides on-premises multiparty audio/video conferencing?","Cisco Meeting Server","Cisco Unity Connection","Expressway-E","Cisco Prime Collaboration Deployment","Cisco Meeting Server hosts spaces and ad hoc/scheduled conferences."],
+["What is the maximum number of call-processing subscriber nodes in a CUCM cluster?","8","2","4","20","A cluster supports up to 8 call-processing subscribers (plus publisher, TFTP, and media nodes)."]
+]},
+{n:7,part:"Part II: Endpoints",title:"Cisco Unified Communications Phones",qs:[
+["Which DHCP option provides Cisco IP phones with the TFTP server address?","Option 150","Option 3","Option 6","Option 43","Option 150 (or option 66) points phones at the TFTP server."],
+["Which Cisco 8800 Series model includes integrated Wi-Fi and a built-in camera for video?","8865","8811","8841","7841","The 8865 adds video and Wi-Fi; the 8861 has Wi-Fi without video."],
+["Which statement about the 7800 Series is true?","It is an audio-only phone family","It supports integrated HD video","It requires a sidecar to make calls","It runs CE/RoomOS software","7800 Series phones are voice-only; video models are in the 8800 line (8845/8865)."],
+["Where in CUCM do you set the default firmware load for all phones of a given model?","Device Defaults","Enterprise Parameters","Service Activation","Region configuration","Device > Device Settings > Device Defaults sets the load name per model; a per-phone Phone Load Name overrides it."],
+["What firmware type allows Cisco phones to register to third-party or cloud call control such as Webex Calling?","Multiplatform Phone (MPP) firmware","Enterprise SCCP firmware","CE firmware","Jabber firmware","MPP firmware is used for Webex Calling and third-party SIP platforms."],
+["From which server does a phone download its configuration file and firmware when registering to CUCM?","TFTP server","LDAP server","NTP server","SMTP server","The phone requests SEP<MAC>.cnf.xml and its load from the TFTP server."]
+]},
+{n:8,part:"Part II: Endpoints",title:"Cisco TelePresence Endpoints",qs:[
+["Cisco's CE software for video endpoints is now known as:","RoomOS","IOS XE","TC software","Jabber OS","Collaboration Endpoint (CE) software evolved into RoomOS."],
+["Which endpoint series is a codec-only platform aimed at custom room integrations?","SX Series (e.g., SX80)","DX Series","MX Series","7800 Series","The SX80 is an integrator codec used with separate cameras, displays, and mics."],
+["The DX Series endpoints are best described as:","Personal desktop video devices","Large boardroom systems","Codec-only integrator platforms","Analog phones","DX70/DX80 are desktop all-in-one collaboration devices."],
+["The MX Series endpoints are:","Integrated all-in-one room systems with displays, camera, and codec","Codec-only integration platforms","IP desk phones","Headsets","MX200/300/700/800 are integrated room systems."],
+["Which device is the desktop collaboration device with a large touch screen in the Webex Desk family?","Webex Desk Pro","Webex Room Kit Pro","SX20","Cisco 8851","Desk Pro is a personal desktop device with a 27-inch touch screen."],
+["Which interface lets you configure and control CE/RoomOS devices programmatically or from the CLI?","xAPI (via SSH, HTTP, or macros)","SNMP only","SCCP","H.245","xConfiguration, xCommand, and xStatus are part of the xAPI."]
+]},
+{n:9,part:"Part II: Endpoints",title:"Endpoint Registration",qs:[
+["What file name does a SIP phone request from TFTP when registering to CUCM?","SEP<MAC>.cnf.xml","XMLDefault.cnf only","<hostname>.cfg","CTLFile.tlv only","Each phone requests a configuration file named after its MAC address."],
+["Unless auto-registration is enabled, what must exist in CUCM before a phone can register?","A device configured with the phone's MAC address","An LDAP account for the phone","A Unity Connection mailbox","A route pattern","CUCM matches the registering device by MAC address."],
+["Which port does H.323 RAS registration to an Expressway gatekeeper use?","UDP 1719","TCP 1720","TCP 5061","UDP 5060","RAS uses UDP 1719; H.225 call signaling uses TCP 1720."],
+["What must be configured on Expressway Core so it will accept SIP registrations for a domain?","The SIP domain must be added under SIP domains","A CUCM device pool","A DHCP scope","A traversal zone","Expressway acts as registrar only for configured SIP domains."],
+["Which Expressway feature can limit which aliases are allowed to register?","Registration restriction policy (allow/deny lists)","Call Admission Control","Search rules","Transforms only","Allow or deny lists control which aliases may register."],
+["When an endpoint registers to Expressway via H.323, what does it register?","One or more aliases such as an H.323 ID or E.164 number","Its MAC address only","A SIP URI only","A CUCM directory number","H.323 endpoints register aliases (H.323 ID, E.164) with the gatekeeper."]
+]},
+{n:10,part:"Part II: Endpoints",title:"Call Settings on Cisco CE Software-Based Endpoints",qs:[
+["Which content-sharing protocol is used with SIP calls?","BFCP","H.239","T.120","RTCP","BFCP manages the presentation floor in SIP; H.239 is its H.323 counterpart."],
+["Which content-sharing protocol is used with H.323 calls?","H.239","BFCP","SRTP","H.245 only","H.239 adds a second video channel for presentations in H.323."],
+["Which setting controls the default bandwidth used when placing calls from a CE endpoint?","Conference DefaultCall Rate","Network QoS Mode","SIP ListenPort","Video Input Connector","DefaultCall Rate sets the call rate in kbps."],
+["Which setting makes the endpoint answer incoming calls without user interaction?","Conference AutoAnswer Mode","Conference DoNotDisturb","SystemUnit Name","Video Selfview","AutoAnswer can be turned on with an optional delay and mute."],
+["What does the built-in MultiSite feature provide?","Multipoint conferencing hosted on the endpoint itself","Multiple SIP registrations","Multiple displays only","Automatic upgrades","MultiSite lets an endpoint bridge several participants (requires the option on supported models)."],
+["What does FECC stand for and do?","Far End Camera Control — lets one side control the other side's camera","Forward Error Correction Codec — repairs packet loss","Fixed Encryption Cipher Control — sets AES","Frame Encoding Compression Control — sets H.264 profile","FECC lets a participant pan/tilt/zoom the remote camera."]
+]},
+{n:11,part:"Part II: Endpoints",title:"Maintaining Cisco Endpoints",qs:[
+["When a CE endpoint is registered to CUCM, how is its software normally upgraded?","CUCM provisions the device load via TFTP","Only from a USB stick","Only through Control Hub","Software cannot be upgraded","CUCM controls the load; the endpoint downloads it from TFTP."],
+["How is software on Webex cloud-registered devices normally managed?","Automatically by the cloud based on the software channel set in Control Hub","Manually via TFTP","Through CUCM Device Defaults","Through Unity Connection","Cloud devices follow the stable/preview channel chosen in Control Hub."],
+["A CE endpoint backup bundle typically includes:","Configuration, favorites, branding, and macros","Call recordings","CDR records","The Unity Connection mailbox store","The backup captures device settings and customizations so they can be restored."],
+["Which xAPI command performs a factory reset on a RoomOS/CE device?","xCommand SystemUnit FactoryReset","xConfiguration Reset All","xStatus Reset","xCommand Call Disconnect","FactoryReset (with Confirm: Yes) returns the device to defaults."],
+["How do you manually upgrade a standalone CE endpoint from its web interface?","Upload the .pkg software file under Software","Edit the SIP settings","Upload an XML configuration","Run a DNS query","The web interface accepts the .pkg file for manual upgrades."],
+["What is an option key used for on Cisco endpoints?","Unlocking licensed features such as MultiSite","Encrypting calls","Resetting the admin password","Registering to CUCM","Option keys enable features tied to the device serial number."]
+]},
+{n:12,part:"Part III: Network Requirements",title:"Cisco Core Network Components",qs:[
+["How much power per port does IEEE 802.3at (PoE+) supply at the source?","30 W","15.4 W","7 W","60 W","802.3af supplies 15.4 W; 802.3at PoE+ supplies 30 W; 802.3bt goes higher."],
+["How does a Cisco IP phone typically learn its voice VLAN from a switch?","CDP or LLDP-MED","DHCP option 150","DNS SRV","NTP","The switch advertises the voice VLAN via CDP or LLDP-MED."],
+["What is the commonly recommended maximum one-way delay for good voice quality?","150 ms","30 ms","500 ms","1 second","ITU-T G.114 recommends ≤150 ms one-way."],
+["What is a generally accepted target for jitter on voice paths?","Under 30 ms","Under 300 ms","Under 1 second","Jitter does not matter for voice","Excess jitter overwhelms jitter buffers and causes choppy audio."],
+["For voice over WLAN, Cisco commonly recommends a minimum signal strength of:","−67 dBm","−90 dBm","−30 dBm","−110 dBm","Designing cells for −67 dBm or better supports voice quality and roaming."],
+["What is the main role of a voice gateway?","Converting between IP voice and TDM/PSTN connections","Storing voicemail","Providing DHCP","Synchronizing LDAP","Gateways bridge IP telephony to PSTN circuits or analog devices."]
+]},
+{n:13,part:"Part III: Network Requirements",title:"Layer 2 and Layer 3 QoS Parameters",qs:[
+["Which DSCP value is recommended for voice media?","EF (46)","AF41 (34)","CS3 (24)","Default (0)","Expedited Forwarding is used for voice bearer traffic."],
+["Which DSCP marking is recommended for interactive video conferencing media?","AF41 (34)","EF (46)","CS1 (8)","CS6 (48)","Cisco marks video conferencing AF41."],
+["Which DSCP marking is recommended for call signaling?","CS3 (24)","EF (46)","AF41 (34)","CS0 (0)","SIP/SCCP signaling uses CS3."],
+["Which Layer 2 CoS value corresponds to voice?","5","3","4","7","CoS 5 aligns with EF; CoS 3 is commonly used for signaling."],
+["Low Latency Queuing (LLQ) combines:","A strict priority queue with class-based weighted fair queuing (CBWFQ)","FIFO and WRED only","Policing and shaping only","Two FIFO queues","LLQ adds a strict priority queue to CBWFQ so voice is serviced first."],
+["Where should the QoS trust boundary ideally be established?","As close to the source as possible, such as the IP phone or access switch port","At the internet edge router","At the data center core","At the PSTN","Trusting markings close to the edge keeps them reliable end to end."],
+["Which MQC command assigns a class to the LLQ strict priority queue?","priority","bandwidth","shape average","fair-queue","Using 'priority' (e.g., priority percent 33) under the class puts it in the priority queue."]
+]},
+{n:14,part:"Part III: Network Requirements",title:"DNS, NTP, and SNMP",qs:[
+["Which DNS SRV record do on-premises Jabber/Webex App clients use to discover CUCM UDS services?","_cisco-uds._tcp.<domain>","_collab-edge._tls.<domain>","_sip._udp.<domain>","_xmpp-client._tcp.<domain>","_cisco-uds points internal clients at CUCM's User Data Services."],
+["Which SNMP version adds authentication and encryption?","SNMPv3","SNMPv1","SNMPv2c","SNMPv2 only with communities","SNMPv3 supports authNoPriv and authPriv security levels."],
+["SNMP traps are sent to which port by default?","UDP 162","UDP 161","TCP 443","UDP 123","Polling uses UDP 161; traps/notifications use UDP 162."],
+["Which port does NTP use?","UDP 123","UDP 162","TCP 22","UDP 69","NTP uses UDP 123."],
+["In NTP, a lower stratum number means:","The source is closer to the reference clock and generally more accurate","The source is less accurate","The source is a client only","Time is in UTC−5","Stratum 1 is directly connected to a reference clock."],
+["Why is accurate NTP critical in a CUCM cluster?","Certificates, database replication, logs, and CDR timestamps depend on synchronized time","It is required for DHCP","It determines codec selection","It assigns directory numbers","Time skew breaks certificate validation and complicates troubleshooting."]
+]},
+{n:15,part:"Part IV: Call Control Mechanisms",title:"Cisco Unified Communications Manager Setup",qs:[
+["Where are CUCM feature services activated?","Cisco Unified Serviceability > Tools > Service Activation","CUCM Administration > System > Server","OS Administration > Settings","Disaster Recovery System","Feature services are activated per node in Serviceability."],
+["What is the scope of enterprise parameters in CUCM?","Cluster-wide","A single node","A single device pool","A single phone","Enterprise parameters apply to the whole cluster; service parameters are per service per node."],
+["Which CUCM element defines the maximum audio bit rate used between devices in different groups?","Regions","Locations","Partitions","Route groups","Regions control codec/bit rate; Locations control CAC bandwidth."],
+["Which item is assigned through a device pool?","CUCM Group, region, date/time group, and location settings","Directory number","Partition of the line","LDAP filter","Device pools bundle common settings for many devices."],
+["What does a CUCM Group define?","The ordered list of CUCM servers a device registers to (primary, secondary, tertiary)","The list of partitions to search","The list of LDAP servers","The list of gateways for route patterns","CUCM Groups provide registration redundancy."],
+["What is the difference between network services and feature services in CUCM?","Network services start automatically; feature services must be activated","Feature services start automatically; network services must be activated","They are identical","Network services exist only on the publisher","Network services are required base services; feature services are optional and activated as needed."]
+]},
+{n:16,part:"Part IV: Call Control Mechanisms",title:"LDAP Integration with CUCM",qs:[
+["Which type of CUCM user cannot be synchronized from LDAP?","Application users","End users","LDAP-synced end users","Users with phones","Application users are local accounts for applications and admins."],
+["Which Active Directory attribute is commonly mapped to the CUCM User ID?","sAMAccountName","telephoneNumber","mail only","objectGUID","sAMAccountName is the default choice; userPrincipalName and mail are alternatives."],
+["When LDAP authentication is enabled, what is still stored and validated locally in CUCM?","End-user PINs","End-user passwords","Application-user IDs only","Nothing","LDAP authentication validates passwords against the directory; PINs remain local."],
+["What is the default port for LDAP over TLS (LDAPS)?","636","389","3268","443","LDAP uses 389; LDAPS 636; Global Catalog 3268 (3269 secure)."],
+["Which user attribute is NOT imported into CUCM during LDAP synchronization?","Passwords","User ID","First and last name","Telephone number","Sync imports demographics; with LDAP authentication, passwords are verified live against the directory."],
+["Which CUCM feature lets LDAP sync automatically create lines and devices for new users?","Feature group template with user profile / universal templates","Route plan report","Bulk Administration export","Call park","Applying a feature group template during sync supports self-provisioning and automatic line creation."]
+]},
+{n:17,part:"Part IV: Call Control Mechanisms",title:"Registering SIP Endpoints to CUCM",qs:[
+["What does the Bulk Administration Tool (BAT) use to add many phones at once?","A phone template plus a CSV data file","A DNS zone file","An LDAP filter","An SNMP walk","BAT combines a template with CSV data to insert devices in bulk."],
+["What is the main benefit of onboarding phones with activation codes?","No need to collect MAC addresses in advance","It removes the need for TFTP","It eliminates licensing","It disables security","Users enter a 16-digit code and the phone associates with the pre-provisioned device."],
+["What does auto-registration do in CUCM?","Automatically adds unknown phones and assigns DNs from a configured range","Synchronizes users from LDAP","Backs up the database","Registers Expressway to CUCM","It's convenient for labs but is often disabled in production for security."],
+["What is self-provisioning in CUCM?","Users call an IVR and authenticate to associate a phone with their account","Phones download firmware automatically","Admins import users from CSV","CUCM upgrades itself","Self-provisioning lets end users claim auto-registered phones."],
+["When provisioning with activation codes, what does CUCM use until the phone actually registers?","A placeholder (dummy) MAC address","The user's email address","The phone's IP address","The serial number from the box","The real MAC replaces the placeholder once the phone activates."],
+["Which phone configuration checkbox enables activation-code onboarding for a device in CUCM?","Require Activation Code for Onboarding","Allow Auto-Registration","Enable Self-Provisioning IVR","Use Trusted Relay Point","After checking it and applying config, CUCM generates a 16-digit code for that device."]
+]},
+{n:18,part:"Part IV: Call Control Mechanisms",title:"CUCM Call Admission Control (CAC)",qs:[
+["What does locations-based CAC in CUCM limit?","The bandwidth available for calls between locations","The codec used between regions","The number of users per partition","The number of LDAP servers","Calls exceeding the configured location bandwidth are rejected or rerouted."],
+["What is a Calling Search Space (CSS)?","An ordered list of partitions a device can reach","A list of CUCM servers","A list of codecs","A group of gateways","CSSs and partitions together implement class of restriction."],
+["When a phone has both a line CSS and a device CSS, how are they combined?","Line CSS partitions are placed before device CSS partitions","Device CSS is ignored","Line CSS is ignored","They are merged alphabetically","The line CSS takes precedence when both match equally."],
+["Which hunting hierarchy is correct in CUCM?","Hunt pilot → hunt list → line group → directory numbers","Line group → hunt pilot → route list","Route pattern → hunt list → partition","Hunt list → CSS → device pool","The pilot points to a hunt list, which orders line groups containing DNs."],
+["Which feature restricts dialing based on time of day?","Time schedules and time periods applied to partitions","Regions","Device mobility","Call park","Time-of-day routing activates partitions only during defined periods."],
+["Enhanced Locations CAC (ELCAC) models the network using:","Locations connected by links, with bandwidth assigned to links and locations","Only regions","Only device pools","SIP trunks only","ELCAC supports multi-hop topologies across clusters."],
+["Which call coverage feature forwards a call when the called line does not answer?","Call Forward No Answer (CFNA)","Call Forward All","Call Pickup Group","Barge","CFNA triggers after the no-answer timer expires."]
+]},
+{n:19,part:"Part IV: Call Control Mechanisms",title:"Configuring Globalized Call Routing in CUCM",qs:[
+["In a globalized dial plan, numbers are normalized to which format?","E.164 with a leading +","Four-digit extensions","Local seven-digit format","Hex format","Globalized routing uses +E.164 internally and localizes at the edges."],
+["What is the correct order of CUCM call routing elements?","Route pattern → route list → route group → gateway/trunk","Route group → route pattern → route list → gateway","Gateway → route pattern → route group","Route list → partition → CSS","Route patterns point to route lists, which order route groups containing devices."],
+["What does the Standard Local Route Group allow?","One route pattern to use the local gateway defined in the caller's device pool","All calls to use one central gateway","Routing without partitions","Automatic LDAP sync","The local route group is resolved per device pool, simplifying dial plans."],
+["In CUCM route patterns, what does the wildcard X match?","Any single digit 0–9","One or more digits","Only the digit 0","The NANP","X matches a single digit; ! matches one or more digits."],
+["What is the purpose of a translation pattern?","To manipulate digits and re-route the call through call routing again","To store voicemail","To define a CUCM group","To set the codec","Translation patterns normalize or change dialed digits, then re-run digit analysis."],
+["Called party transformation patterns are typically applied:","At egress, to localize the number for a gateway or trunk","When a phone registers","Only to voicemail","Inside LDAP","They convert +E.164 back to what the PSTN provider expects."],
+["Which route pattern wildcard represents the North American Numbering Plan?","@","!","X","#","@ references the NANP built-in dial plan."]
+]},
+{n:20,part:"Part V: Edge Services",title:"Introduction to Cisco Edge Services",qs:[
+["Where is Expressway-E normally deployed?","In the DMZ","Inside the enterprise LAN only","On the CUCM publisher","At the service provider","Expressway-E is the traversal server facing the internet."],
+["Which component acts as the traversal client in an Expressway pair?","Expressway-C","Expressway-E","CUCM","CUBE","Expressway-C initiates the outbound traversal connection to Expressway-E."],
+["CUBE is best described as:","A session border controller acting as a back-to-back user agent between networks","A voicemail server","A presence server","An LDAP proxy","CUBE terminates and re-originates sessions, providing security and interworking."],
+["Which CUBE command enables SIP-to-SIP call routing?","allow-connections sip to sip","dial-peer voice 1 pots","sip-ua register","voice translation-rule 1","Under 'voice service voip', this allows SIP-to-SIP connections."],
+["On a voice gateway, which dial-peer type points to the PSTN or analog ports?","POTS dial-peer","VoIP dial-peer","Translation dial-peer","SIP profile","POTS dial-peers map to physical voice ports; VoIP dial-peers point to IP destinations."],
+["Which Expressway zone type routes B2B calls by looking up external domains?","DNS zone","Neighbor zone","Traversal client zone","Default zone","A DNS zone uses SRV/A lookups to reach other organizations."]
+]},
+{n:21,part:"Part V: Edge Services",title:"Mobile and Remote Access (MRA)",qs:[
+["Which public DNS SRV record lets clients discover the Expressway-E for MRA?","_collab-edge._tls.<domain>","_cisco-uds._tcp.<domain>","_sip._udp.<domain>","_h323ls._udp.<domain>","_collab-edge points to Expressway-E on TCP 8443."],
+["Which port do MRA clients use for HTTPS traffic to Expressway-E?","TCP 8443","TCP 80","TCP 5222 only","UDP 3478","MRA uses TCP 8443 for HTTPS, 5061 for SIP, and 5222 for XMPP."],
+["What zone type is required between Expressway-C and Expressway-E for MRA?","Unified Communications traversal zone","Neighbor zone","DNS zone","ENUM zone","MRA requires the Unified Communications traversal type."],
+["What must the Expressway-E certificate contain for MRA?","SAN entries for the domain(s) used by clients, issued by a public CA","Only the IP address","A self-signed certificate only","The CUCM hostname only","Clients validate Expressway-E's public certificate against the service domain."],
+["What does setting TLS Verify Mode to On require?","The peer's certificate must be trusted and its CN/SAN must match the configured address","No certificate","Only an IP address match","Disabling NTP","TLS verify checks trust and identity of the peer."],
+["Which media port range does Expressway-E use by default for traversal media?","UDP 36000–59999","UDP 16384–32767","TCP 1–1024","UDP 5060–5061","Expressway uses the 36000–59999 range for media."],
+["On Expressway-C, which setting enables MRA?","Unified Communications mode set to Mobile and remote access","H.323 mode on","SIP registration proxy mode","Call Policy","Configuration > Unified Communications > Mobile and remote access."]
+]},
+{n:22,part:"Part VI: Webex Calling",title:"Components of the Webex Solution",qs:[
+["Webex Calling is best described as:","A cloud-hosted enterprise PBX service","An on-premises voicemail server","A wireless controller","An LDAP directory","Webex Calling delivers PBX features from the Cisco cloud."],
+["Webex Messaging organizes conversations into:","Spaces (optionally grouped into teams)","Partitions","Hunt lists","Route groups","Spaces hold messages, files, and meetings; teams group related spaces."],
+["What does Webex Video Mesh provide?","On-premises media nodes that keep meeting media local","Cloud voicemail","Cloud LDAP","Phone firmware","Video Mesh reduces bandwidth by processing media on-site."],
+["Which Webex service hosts scheduled and personal-room video meetings?","Webex Meetings","Webex Calling","Directory Connector","Hybrid Calendar only","Webex Meetings provides meetings and personal rooms."],
+["Which tool is the central administration portal for Webex services?","Webex Control Hub","CUCM Administration","Expressway web UI","Unity Connection Administration","Control Hub manages users, devices, services, and analytics."],
+["What happens when on-premises Webex Video Mesh nodes run out of capacity?","Meetings overflow to the Webex cloud","New calls are rejected","Calls fall back to the PSTN","Media is sent to CUCM conference bridges","Video Mesh keeps media local when it can and overflows to the cloud when local resources are full."]
+]},
+{n:23,part:"Part VI: Webex Calling",title:"Adding Users and Devices in Webex Control Hub",qs:[
+["Which method is NOT used to add users to Control Hub?","Unity Connection import","Manual entry","CSV bulk import","Directory Connector synchronization","Users come from manual entry, CSV, Directory Connector, or SCIM/Entra ID sync."],
+["What does Directory Connector do?","Synchronizes users from on-premises Active Directory to the Webex cloud","Registers phones to CUCM","Connects Expressway to CUCM","Backs up Control Hub","Directory Connector runs on Windows and syncs AD to Webex."],
+["In which direction does Directory Connector sync?","One-way, from Active Directory to the cloud","Two-way","Cloud to AD only","No sync occurs","AD remains the source of truth."],
+["What should you do before claiming users in your organization's domain?","Verify the domain using a DNS TXT record","Configure a CUCM route pattern","Enable SNMP","Create a hunt group","Domain verification proves ownership."],
+["How can an MPP phone be added to a user in Control Hub?","By MAC address or by generating an activation code","Only by serial number","Only through CUCM BAT","By IP address","Either method associates the phone with the user or workspace."],
+["Room devices shared by many people are added in Control Hub as:","Workspaces","Users","Locations only","Hunt groups","Workspaces represent shared spaces and their devices."]
+]},
+{n:24,part:"Part VI: Webex Calling",title:"Webex Calling Options",qs:[
+["Which PSTN option uses Cisco as the PSTN provider for Webex Calling?","Cisco Calling Plan","Local Gateway","Cloud Connected PSTN","Analog FXO only","Cisco Calling Plan bundles PSTN service from Cisco (where available)."],
+["What is Cloud Connected PSTN (CCP)?","PSTN service from certified partners connected directly to the Webex cloud","An on-premises gateway","A CUCM feature","A Unity Connection integration","CCP providers peer with Webex in the cloud."],
+["What does a Local Gateway (LGW) provide?","Premises-based PSTN access for Webex Calling through the customer's own router","Cloud voicemail","LDAP sync","Meeting recording","The LGW connects Webex Calling to an existing PSTN trunk."],
+["Which routers can act as a Webex Calling Local Gateway?","Cisco IOS XE platforms such as ISR 4000 and Catalyst 8000 Series","Any consumer Wi-Fi router","Cisco Unity Connection","Expressway-E","LGW runs on supported IOS XE routers with CUBE."],
+["What are the two Local Gateway trunk types?","Registration-based and certificate-based","Analog and digital","H.323 and SCCP","Primary and tertiary","Registration-based uses SIP digest; certificate-based uses mutual TLS."],
+["In a deployment with an on-premises IP PBX, the Local Gateway can:","Route calls between the PBX, the PSTN, and Webex Calling","Replace the PBX database","Act as an LDAP server","Host meetings","The LGW can co-reside with the enterprise trunk to the PBX."]
+]},
+{n:25,part:"Part VI: Webex Calling",title:"Webex Calling Features",qs:[
+["Which feature answers calls with a menu of options and routes callers based on input?","Auto attendant","Paging group","Call park","Single number reach","Auto attendants provide IVR menus for business hours and after hours."],
+["What is a key difference between a call queue and a hunt group?","A call queue holds callers with announcements and music until an agent is free","A hunt group plays music on hold to queued callers","They are identical","Queues can only ring one agent","Queues hold and order callers; hunt groups just ring members."],
+["Which is a user-configurable feature in Webex Calling?","Do Not Disturb","Auto attendant","Location PSTN settings","Trunk configuration","Users manage DND, forwarding, and similar settings themselves."],
+["What does Single Number Reach do?","Rings additional numbers, such as a mobile phone, when the user's number is called","Assigns one number to many locations","Pages a group of phones","Records calls","It lets users answer business calls on other devices."],
+["Which feature lets a user place a call on hold to be retrieved from another phone?","Call park","Barge-in","Call recording","Anonymous call rejection","Parked calls can be retrieved by dialing the park extension."],
+["Which admin feature broadcasts one-way audio to a group of phones?","Paging group","Call queue","Hunt group","Voicemail group","Paging sends announcements to multiple phones at once."]
+]},
+{n:26,part:"Part VI: Webex Calling",title:"Webex Calling Using a Local Gateway",qs:[
+["For a registration-based LGW, which values does Control Hub provide when you create the trunk?","Registrar domain, trunk group OTG/DTG, line/port, outbound proxy, username, and password","Only an IP address","A MAC address and serial number","LDAP bind credentials","These values are entered on the router's tenant configuration."],
+["Which IOS XE construct typically holds the Webex-facing SIP settings on the Local Gateway?","voice class tenant","dial-peer voice pots","telephony-service","ephone-dn","The tenant groups registration, credentials, and outbound proxy settings."],
+["What must the LGW trust to establish TLS with Webex Calling?","The Cisco trusted root CA bundle (imported into the PKI trustpool)","A self-signed certificate on the phone","The CUCM Tomcat certificate only","No certificate","The router validates Webex's certificate against the trusted CA bundle."],
+["What media encryption does Webex Calling require on the LGW-to-cloud leg?","SRTP","Plain RTP","IPsec only","No encryption","Media toward Webex Calling is SRTP."],
+["Which command enables SIP-to-SIP call routing on the LGW?","allow-connections sip to sip under voice service voip","telephony-service","call-manager-fallback","ip dhcp pool","The LGW acts as CUBE, so SIP-to-SIP must be allowed."],
+["What links an inbound dial-peer to the set of outbound dial-peers in an LGW configuration?","Dial-peer groups (destination dial-peer group)","Route lists","Partitions","Hunt pilots","Dial-peer groups provide deterministic routing between legs."]
+]},
+{n:27,part:"Part VII: Collaboration Applications",title:"Understanding Cisco Unity Connection",qs:[
+["Which two methods can integrate Unity Connection with CUCM?","SCCP voicemail ports or a SIP trunk","H.323 gatekeeper or MGCP","LDAP or SNMP","Analog FXO or FXS","SCCP ports register like phones; SIP integration uses a trunk."],
+["On CUCM, which elements tell phones where to send calls for voicemail?","Voicemail pilot and voicemail profile","Hunt pilot and line group","Region and location","Translation pattern only","The pilot number is referenced by the voicemail profile assigned to lines."],
+["Which is a default system call handler in Unity Connection?","Opening Greeting","Hunt Pilot","Directory Connector","Route Group","Default call handlers include Opening Greeting, Operator, and Goodbye."],
+["How does Unity Connection decide between direct and forwarded routing rules?","Direct rules handle calls dialed to the voicemail number; forwarded rules handle calls forwarded from an extension","Based on codec","Based on the caller's region","It always uses direct rules","Forwarded calls usually go to the user's greeting; direct calls to sign-in."],
+["What controls lockout after repeated failed sign-in attempts?","Authentication rules","Class of service","Call handler","Partition","Authentication rules define failed attempts, lockout, and credential expiry."],
+["What do partitions and search spaces control in Unity Connection?","Which objects (users, handlers, extensions) a caller or user can reach","Codec selection","LDAP sync schedule","Phone firmware","They scope dial plan reachability inside Unity Connection."]
+]},
+{n:28,part:"Part VII: Collaboration Applications",title:"Unity Connection End-User and Voice Mailbox",qs:[
+["What is the purpose of a user template in Unity Connection?","Provide default settings applied when creating new users","Back up the mailbox store","Route PSTN calls","Synchronize firmware","Templates apply consistent settings at user creation."],
+["What does a Class of Service (CoS) control?","Feature access and limits such as message length and licensed features","Network QoS markings","Codec preference","The CUCM CSS","CoS governs what users may do in Unity Connection."],
+["Which three transfer rules exist for a user or call handler?","Standard, Alternate, and Closed","Busy, Internal, and Holiday","Primary, Secondary, and Tertiary","Day, Night, and Weekend","Transfer rules decide where calls go before the greeting plays."],
+["Which greeting, when enabled, overrides all other greetings?","Alternate","Standard","Busy","Internal","The Alternate greeting is used for extended absences and takes precedence."],
+["What does 'caller input' configure?","Actions taken when a caller presses keys during a greeting","The user's PIN","LDAP filters","Mailbox quotas","Each key can route to a handler, user, or action."],
+["What does TUI refer to in Unity Connection?","The Telephone User Interface used to access voicemail by phone","The Tomcat User Interface","The Text Unified Inbox","The TFTP Upload Interface","Users navigate messages and settings via the phone keypad."]
+]},
+{n:29,part:"Part VII: Collaboration Applications",title:"Deploying the Webex Application",qs:[
+["Which CUCM device type is used for the Webex App on Windows/macOS desktop?","Cisco Unified Client Services Framework (CSF)","BOT","TCT","TAB","CSF is desktop; BOT is Android; TCT is iPhone; TAB is tablet."],
+["When Webex App uses CUCM for calling, where is messaging handled?","In the Webex cloud","On CUCM IM and Presence","On Unity Connection","On Expressway-E","Webex App messaging is cloud-based; calling can be on-prem."],
+["How do internal Webex App clients discover CUCM for calling?","DNS SRV _cisco-uds._tcp and/or settings pushed from Control Hub","DHCP option 150 only","SNMP traps","LDAP referrals","Service discovery uses UDS SRV records and the configured UC Manager profile."],
+["Which device type is used for Webex App on an iPhone?","TCT","BOT","CSF","SEP","TCT devices represent iPhone clients."],
+["When migrating from Jabber to Webex App, which can typically be reused?","The existing CUCM softphone devices and dial plan","Jabber's chat history on IM&P automatically","Unity Express","SCCP phones only","Webex App registers to the same CSF/BOT/TCT devices."],
+["Where do admins configure Webex App calling behavior to use CUCM?","Control Hub calling settings (Calling Behavior / UC Manager profile)","Expressway search rules","Unity Connection CoS","RTMT","Control Hub decides whether users call via CUCM or Webex Calling."]
+]},
+{n:30,part:"Part VIII: Troubleshooting",title:"Troubleshooting Endpoints",qs:[
+["What tool can collect logs from Cisco IP phones for TAC?","Problem Report Tool (PRT)","Dialed Number Analyzer","DRS","CAR","PRT gathers phone logs into a bundle."],
+["To view console logs from a Cisco IP phone's web page, what must be enabled?","Web Access on the phone configuration","SNMP traps","LDAP authentication","Auto-registration","Web access is disabled by default for security."],
+["How do you download a full log bundle from a CE/RoomOS endpoint?","From the web interface under Issues and Diagnostics / System Logs","From CUCM Device Defaults","Through DHCP","Only by RMA","The web UI lets you download all logs as a bundle."],
+["One-way audio in a call is most often caused by:","Routing, NAT, or firewall problems blocking RTP in one direction","Wrong ringtone","LDAP sync failure","Incorrect phone language","Signaling succeeds but media can't flow both ways."],
+["Which on-phone screen shows jitter, packet loss, and codec during a call?","Call Statistics","Network Configuration","Model Information","Status Messages","Call Statistics shows real-time stream metrics."],
+["On Jabber for Windows, how do you open the problem report generator?","Help > Report a Problem","Settings > Audio","Ctrl+Alt+Del","Contacts > Import","Jabber's PRT creates a log bundle for analysis."]
+]},
+{n:31,part:"Part VIII: Troubleshooting",title:"CUCM Reports",qs:[
+["What does Dialed Number Analyzer (DNA) do?","Simulates how CUCM would route a dialed number from a given calling device","Records calls","Backs up CUCM","Collects SNMP statistics","DNA tests dial plan logic without placing calls."],
+["CAR stands for:","CDR Analysis and Reporting","Call Admission Routing","Cluster Audit Report","Codec Allocation Rules","CAR builds reports from CDR/CMR data."],
+["Which service parameter must be set to generate CDRs?","CDR Enabled Flag","Auto Registration Flag","Call Diagnostics only","Enable LDAP","CDR Enabled Flag (and Call Diagnostics Enabled for CMRs)."],
+["What do CMRs contain that CDRs do not?","Call quality metrics such as jitter, latency, and packet loss","Calling and called numbers","Call duration","Originating device name","CMRs (diagnostic records) carry quality statistics."],
+["Which cause code typically indicates normal call clearing in a CDR?","16","17","34","41","Q.850 cause 16 is normal clearing; 17 is user busy."],
+["Where can CDR files be pushed for third-party billing?","Billing servers configured in CDR Management (via SFTP)","DHCP servers","NTP servers","LDAP servers","CDR Management sends flat files to external billing servers."]
+]},
+{n:32,part:"Part VIII: Troubleshooting",title:"Real-Time Monitoring Tool (RTMT)",qs:[
+["What is RTMT?","A client application that monitors CUCM and other UC servers in real time","A phone firmware","A backup service","A dial plan","RTMT is downloaded from CUCM and connects to the cluster."],
+["Which RTMT feature collects trace files from multiple nodes?","Trace & Log Central","Session Trace only","Dialed Number Analyzer","CAR","Trace & Log Central collects and downloads traces."],
+["What does Session Trace in RTMT provide?","Ladder diagrams of call signaling","Bandwidth graphs only","Backup status","LDAP sync results","Session Trace visualizes SIP/SCCP message flow for a call."],
+["How can RTMT notify administrators of alerts?","Email notifications","Only by SNMP v1","Only by printing reports","It cannot notify","Alerts can trigger email and alert actions."],
+["What can RTMT show about devices?","Counts of registered and unregistered devices","Phone ringtones","User passwords","Voicemail content","Device monitoring shows registration status."],
+["Which port does RTMT use to connect to CUCM?","TCP 8443 (HTTPS)","UDP 161","TCP 23","UDP 69","RTMT communicates with CUCM over HTTPS on 8443."]
+]},
+{n:33,part:"Part VIII: Troubleshooting",title:"Understanding the Disaster Recovery System",qs:[
+["Where does DRS store backups?","On an SFTP server","On the phones","On an LDAP server","On a TFTP server only","DRS backup devices are SFTP destinations (or local tape in older releases)."],
+["When restoring a CUCM cluster, which node is restored first?","The publisher","A random subscriber","The TFTP server","Unity Connection","Restore the publisher first, then subscribers."],
+["What must match when restoring a CUCM node from backup?","Software version, hostname, and IP address","Only the MAC address","Only the cluster name","Nothing","Restore requires the same version and network identity."],
+["How can backups be automated in DRS?","Using the DRS scheduler","Using RTMT alerts","Using CAR","Using BAT","Scheduled backups run at set intervals."],
+["Where does the DRS Master Agent run?","On the publisher","On every phone","On the SFTP server","On Expressway-E","The master agent coordinates; local agents run on each node."],
+["What DRS backup device setting controls how many backups are kept?","Number of backups to store on the network directory","Backup timeout","Retention in RTMT","CDR file count","Older backups are deleted beyond this number."]
+]},
+{n:34,part:"Part VIII: Troubleshooting",title:"Monitoring Voicemail in Cisco Unity Connection",qs:[
+["Where are Unity Connection reports generated?","Cisco Unity Connection Serviceability > Tools > Reports, and Unity Connection Administration","CUCM Device Defaults","Expressway Status","DHCP server","Unity Connection provides reports in Serviceability and Administration."],
+["Which service collects data for Unity Connection reports?","Cisco Unity Connection Reports Data Harvester","Cisco CallManager","Cisco DRF Local","Cisco Tomcat only","The Reports Data Harvester gathers data for reports."],
+["Which report helps determine if you have enough voicemail ports?","Port Activity report","Users report","Distribution List report","Phone Interface Failed Logon report","Port usage shows busy ports and capacity needs."],
+["Which report helps investigate repeated failed voicemail sign-ins?","Phone Interface Failed Logon report","Port Activity report","Call Handler Traffic report","Mailbox Store report","It lists failed TUI logons for security review."],
+["What does the Mailbox Store report show?","Mailbox store size and status","Which phones are registered","CDR records","Network QoS","It helps manage storage capacity."],
+["Which report shows how calls flow through a call handler?","Call Handler Traffic report","Users report","Mailbox Store report","Unused Voice Mail Accounts report","It summarizes handler usage and caller input."]
+]}
+];
+
+// Source catalog: id -> [title, site, type, url]
+// type: "cisco" = Cisco/Webex official documentation; "prep" = exam-prep / study site; "ref" = community or general reference
+const SRC = {
+toc:["CLCOR 350-801 OCG, 2nd Ed. — table of contents (chapter topic)","O'Reilly","ref","https://www.oreilly.com/library/view/ccnp-and-ccie/9780138200893"],
+bw:["Voice Over IP – Per Call Bandwidth Consumption","Cisco","cisco","https://www.cisco.com/c/en/us/support/docs/voice/voice-quality/7934-bwidth-consume.html"],
+cbt_bw:["How to Calculate Bandwidth for Cisco IP Calls","CBT Nuggets","prep","https://www.cbtnuggets.com/blog/technology/networking/how-to-calculate-bandwidth-for-cisco-ip-calls"],
+vchist:["A history of video conferencing technology","Packetizer","ref","https://www.packetizer.com/voip/history-of-videoconferencing"],
+h323wiki:["H.323","Wikipedia","ref","https://www.wikipedia.com/wiki/H323"],
+imp_srnd:["Collaboration 9.x SRND – Cisco IM and Presence","Cisco","cisco","https://www.cisco.com/en/US/docs/voice_ip_comm/cucm/srnd/9x/presence.html"],
+oep_codec:["350-801 Study Guide §3.3 – Audio/Video Codecs","OpenExamPrep","prep","https://open-exam-prep.com/study-guides/cisco-350-801/protocols-codecs-endpoints/codecs-and-dtmf-relay"],
+oep_sip:["350-801 Study Guide §3.1 – SIP Signaling","OpenExamPrep","prep","https://open-exam-prep.com/study-guides/cisco-350-801/protocols-codecs-endpoints/sip-signaling-call-flows"],
+oep_net:["350-801 Study Guide §2.3 – DNS, NTP, DHCP & LDAP","OpenExamPrep","prep","https://open-exam-prep.com/study-guides/cisco-350-801/edge-security-services/network-services-infrastructure"],
+oep_edge:["350-801 Study Guide §2.1 – CUBE & Expressway","OpenExamPrep","prep","https://open-exam-prep.com/study-guides/cisco-350-801/edge-security-services/edge-architecture-cube-expressway"],
+oep_qos:["350-801 Study Guide §11.2 – QoS Marking & Trust","OpenExamPrep","prep","https://open-exam-prep.com/study-guides/cisco-350-801/media-quality-qos/qos-classification-marking-trust"],
+oep_llq:["350-801 Study Guide §11.3 – LLQ on IOS XE","OpenExamPrep","prep","https://open-exam-prep.com/study-guides/cisco-350-801/media-quality-qos/llq-configuration-cisco-ios-xe"],
+oep_imp:["350-801 Study Guide §11.1 – Media Impairments","OpenExamPrep","prep","https://open-exam-prep.com/study-guides/cisco-350-801/media-quality-qos/real-time-media-impairments"],
+oep_ep:["350-801 Study Guide §3.4 – Endpoint Onboarding","OpenExamPrep","prep","https://open-exam-prep.com/study-guides/cisco-350-801/protocols-codecs-endpoints/endpoint-deployment-troubleshooting"],
+oep_css:["350-801 Study Guide §4.1 – Partitions & CSS","OpenExamPrep","prep","https://open-exam-prep.com/study-guides/cisco-350-801/cucm-dial-plan-fundamentals/partitions-and-css"],
+oep_rp:["350-801 Study Guide §4.2 – Route Patterns, Groups & Lists","OpenExamPrep","prep","https://open-exam-prep.com/study-guides/cisco-350-801/cucm-dial-plan-fundamentals/route-patterns-groups-lists"],
+oep_cac:["350-801 Study Guide §5.1 – CAC, Locations & AAR","OpenExamPrep","prep","https://open-exam-prep.com/study-guides/cisco-350-801/advanced-call-control-user-management/cac-locations-aar"],
+oep_ldap:["350-801 Study Guide §5.3 – LDAP Integration","OpenExamPrep","prep","https://open-exam-prep.com/study-guides/cisco-350-801/advanced-call-control-user-management/cucm-user-management-ldap-rbac"],
+oep_dna:["350-801 Study Guide §5.4 – Dial-Plan Troubleshooting Tools","OpenExamPrep","prep","https://open-exam-prep.com/study-guides/cisco-350-801/advanced-call-control-user-management/axl-api-dial-plan-troubleshooting"],
+oep_cuc_int:["350-801 Study Guide §6.1 – Unity Connection Integration","OpenExamPrep","prep","https://open-exam-prep.com/study-guides/cisco-350-801/cisco-unity-connection/cuc-architecture-sip-integration"],
+oep_cuc_cos:["350-801 Study Guide §6.2 – Templates & Class of Service","OpenExamPrep","prep","https://open-exam-prep.com/study-guides/cisco-350-801/cisco-unity-connection/cuc-mailbox-templates-cos"],
+oep_cuc_ch:["350-801 Study Guide §6.4 – Call Handlers","OpenExamPrep","prep","https://open-exam-prep.com/study-guides/cisco-350-801/cisco-unity-connection/cuc-call-handlers-directory"],
+oep_dir:["350-801 Study Guide §8.2 – Cloud Identity & Directory Connector","OpenExamPrep","prep","https://open-exam-prep.com/study-guides/cisco-350-801/webex-architecture-control-hub/cloud-identity-scim-directory"],
+oep_pstn:["350-801 Study Guide §9.5 – Webex Calling PSTN Options","OpenExamPrep","prep","https://open-exam-prep.com/study-guides/cisco-350-801/webex-calling-pstn-connectivity/pstn-connectivity-cc-pstn-cisco-plans"],
+oep_lgw:["350-801 Study Guide §9.6 – Local Gateway","OpenExamPrep","prep","https://open-exam-prep.com/study-guides/cisco-350-801/webex-calling-pstn-connectivity/webex-calling-local-gateway-cube"],
+oep_dr:["350-801 Study Guide §1.3 – High Availability & DR","OpenExamPrep","prep","https://open-exam-prep.com/study-guides/cisco-350-801/collaboration-architecture/high-availability-dr"],
+cp_ch19:["CLCOR OCG – Globalized Call Routing (chapter excerpt)","Cisco Press","prep","https://www.ciscopress.com/articles/article.asp?p=3089358"],
+cp_expwy:["Cisco Expressway initial configuration (chapter excerpt)","Cisco Press","prep","https://www.ciscopress.com/articles/article.asp?p=3129279"],
+car_lc:["CUCM CAR Tool","learncisco.net","prep","https://www.learncisco.net/courses/icomm-ccna-voice/cisco-uc-solution-maintenance/cucm-car-tool.html"],
+lc_svc:["Serviceability, Backup and Restore","learncisco.net","prep","https://www.learncisco.net/courses/cucm-basics/serviceability-backup-and-restore.html"],
+snmp_cbt:["What is Port 162?","CBT Nuggets","prep","https://www.cbtnuggets.com/common-ports/what-is-port-162"],
+cvtqos:["Video & TelePresence Architecture Design Guide – QoS","Cisco","cisco","https://www3-realm.cisco.com/en/US/docs/voice_ip_comm/uc_system/design/guides/videodg/qos.html"],
+qos_wp:["Enterprise QoS white paper (150 ms / 30 ms / 1%)","Cisco","cisco","https://www3-realm.cisco.com/en/US/technologies/tk543/tk759/technologies_white_paper0900aecd80295aa1.pdf"],
+vowlan:["Voice over WLAN 4.1 Design Guide – RF Design","Cisco","cisco","https://www3-realm.cisco.com/en/US/docs/solutions/Enterprise/Mobility/vowlan/41dg/vowlan_ch3.html"],
+pri:["IOS Voice, Video & Fax Config Guide – ISDN","Cisco","cisco","https://www3-realm.cisco.com/en/US/docs/ios/12_2/voice/configuration/guide/vvfisdn.html"],
+h323ports:["VCS/Expressway default port summary (Assent, H.460.18/19)","Cisco (manual mirror)","cisco","https://manualslib.com/manual/839671/Cisco-Telepresence.html?page=223"],
+mra_tn:["MRA tech note 118798 (_collab-edge, certificates)","Cisco","cisco","https://www.cisco.com/c/en/us/support/docs/unified-communications/expressway/118798-technote-cucm-00.html"],
+mra_ports:["Expressway-E MRA port requirements","Cisco Community","ref","https://community.cisco.com/t5/unified-communications-infrastructure/expressway-e-mra-port-requirements/m-p/4745853"],
+srnd_cluster:["CUCM clustering (SRND: 20 servers, 8 call-processing)","Cisco Community","ref","https://community.cisco.com/t5/other-collaboration-subjects/cucm-clustering-and-group-question/m-p/1876323"],
+lgw:["Configure Local Gateway on Cisco IOS XE for Webex Calling","Webex Help (Cisco)","cisco","https://help.webex.com/en-us/article/jr1i3r"],
+brk2812:["BRKCOL-2812 Troubleshooting Webex Calling Premises PSTN","Cisco Live","cisco","https://www.ciscolive.com/c/dam/r/ciscolive/emea/docs/2024/pdf/BRKCOL-2812.pdf"],
+dcloud:["CUCM QR / Activation Code onboarding","Cisco dCloud","cisco","https://dcloud-docs.cisco.com/c/r/dcloud-docs/sites/en_us/dcloud-help/using-dcloud-content/cisco-unified-communications-manager-qr-activation-code.html"],
+wxapp:["Webex App integration for in-app calling (CSF/BOT/TCT/TAB)","Webex Help (Cisco)","cisco","https://help.webex.com/article/zu9tx1"],
+wxapp_auto:["Auto-provisioning of Webex App devices in Unified CM","Webex Help (Cisco)","cisco","https://help.webex.com/en-us/article/nsdjszx"],
+drs_cli:["Configure and troubleshoot DRS (214287)","Cisco","cisco","https://bxin.cisco.com/c/en/us/support/docs/unified-communications/unified-communications-manager-callmanager/214287-configure-and-troubleshoot-cisco-unified.pdf"],
+cuc_rpt:["Unity Connection Serviceability – Using Reports (10.x)","Cisco","cisco","https://www.cisco.com/en/US/docs/voice_ip_comm/connection/10x/serv_administration/guide/10xcucservag050.html"],
+cuc_rpt9:["Unity Connection Serviceability – Reports (9.x)","Cisco","cisco","https://www3-realm.cisco.com/en/US/docs/voice_ip_comm/connection/9x/serv_administration/guide/9xcucservag050.pdf"],
+cuc_harv:["Unity Connection Troubleshooting – Reports Data Harvester","Cisco","cisco","https://www3-realm.cisco.com/en/US/docs/voice_ip_comm/connection/9x/troubleshooting/guide/9xcuctsg030.html"],
+cuc_greet:["Unity Connection – Managing Personal Greetings","Cisco","cisco","https://cisco.com/en/US/docs/voice_ip_comm/connection/1x/user/guide/ug160.html"],
+cuc_tr:["Cisco PCA help – About Call Transfer Rules","Cisco PCA help (hosted)","cisco","https://cuc.itc.usf.edu/ciscopca/onlinehelp/enu/help/htmlfiles/c_about_call_transfer_rules.html"],
+rtmt_st:["RTMT Admin Guide 8.5 – Session Trace & device monitoring","Cisco","cisco","https://www3-realm.cisco.com/en/US/docs/voice_ip_comm/cucm/service/8_5_1/rtmt/rtconfcm.html"],
+rtmt_tlc:["RTMT Admin Guide 8.0 – Trace and Log Central","Cisco","cisco","https://www3-realm.cisco.com/en/US/docs/voice_ip_comm/cucm/service/8_0_1/rtmt/rttlc.html"],
+rtmt_inst:["RTMT Admin Guide 8.0(2) – Installing RTMT (port 8443)","Cisco","cisco","https://www3-realm.cisco.com/en/US/docs/voice_ip_comm/cucm/service/8_0_2/rtmt/rtinst.html"],
+rtmt_alert:["RTMT Admin Guide – System alerts (Enable Email)","Cisco","cisco","https://www3-realm.cisco.com/en/US/docs/voice_ip_comm/cucm/service/8_5_1/rtmt/rtalsys.html"],
+rtmt_comm:["How to monitor voicemail call flow using RTMT","Cisco Community","ref","https://community.cisco.com/t5/collaboration-knowledge-base/how-to-monitor-voice-mail-call-flow-using-rtmt/ta-p/3153800"],
+ex_fr:["Factory reset (xCommand SystemUnit FactoryReset)","Cisco Community","ref","https://community.cisco.com/t5/collaboration-voice-and-video/factory-reset-ex90/m-p/3106294"],
+roomos_rn:["Release notes for RoomOS software (software channels)","Webex Help (Cisco)","cisco","https://help.webex.com/6ger7db/"],
+wxblog:["Webex Devices – single operating system: RoomOS","Webex Blog (Cisco)","cisco","https://blog.webex.com/workspaces/webex-devices-transforming-workspaces-so-you-can-get-stuff-done/"],
+css_comm:["Line CSS vs device CSS (SRND reference)","Cisco Community","ref","https://community.cisco.com/t5/unified-communications-infrastructure/line-css/m-p/2504451"],
+wild:["CallManager Admin Guide – Route pattern wildcards","Cisco","cisco","https://www.cisco.com/en/US/docs/voice_ip_comm/cucm/admin/3_1_2/ccmcfg/b03spchr.html"],
+lrg:["Called Party Transformation Patterns & Local Route Group","NetCraftsmen","ref","https://netcraftsmen.com/called-party-transformation-patterns-example-and-validation/"],
+dp211306:["In-depth explanation of IOS dial-peer matching (211306)","Cisco","cisco","https://www.cisco.com/c/en/us/support/docs/voice/ip-telephony-voice-over-ip-voip/211306-In-Depth-Explanation-of-Cisco-IOS-and-IO.pdf"],
+cube_sip:["Configure a Cisco CUBE/CUCM SIP trunk (allow-connections)","Telnyx Support","ref","https://support.telnyx.com/en/articles/1130673-configure-a-cisco-cube-cucm-sip-user-pass-trunk"],
+p8800:["The Cisco IP Phone 8800 Series (feature table)","Webex Help (Cisco)","cisco","https://help.webex.com/bwb4mr"],
+ds8865:["Cisco IP Phone 8865 Data Sheet","Cisco","cisco","https://www.cisco.com/c/en/us/products/collateral/collaboration-endpoints/unified-ip-phone-8800-series/datasheet-c78-734731.html"],
+prt:["Collect a PRT from 78xx/88xx endpoints","Cisco","cisco","https://www.cisco.com/c/en/us/support/docs/collaboration-endpoints/ip-phone-8800-series/200770-How-to-Collect-a-Collaboration-Endpoint.html"],
+jabberprt:["Cisco Jabber: Problem Report Tool","UW–River Falls IT KB","ref","https://technology.uwrf.edu/TDClient/1979/Portal/KB/ArticleDet?ID=152603"],
+oneway:["Troubleshoot Jabber audio issues (225121)","Cisco","cisco","https://www.cisco.com/c/en/us/support/docs/unified-communications/jabber/225121-troubleshoot-jabber-audio-issues-with.pdf"],
+oneway2:["Common Problems Reported by Users (one-way audio)","Cisco","cisco","https://www.cisco.com/cisco/web/docs/iam/unified/ipt601/Common_Problems_Reported_by_Users.html"],
+cdr:["Understanding CDR (Call Detail Records)","Cisco Community","ref","https://community.cisco.com/t5/collaboration-knowledge-base/understanding-cdr-call-detail-records/tac-p/3112492/highlight/true"],
+cmr:["CMR enhancement in CUCM 12.5 (214152)","Cisco","cisco","https://cisco.com/c/en/us/support/docs/unified-communications/unified-communications-manager-callmanager/214152-cmr-enhancement-in-cucm-12-5.html"],
+cause:["Voice router internal call disconnect cause codes (214634)","Cisco","cisco","https://www.cisco.com/c/en/us/support/docs/unified-communications/unified-border-element/214634-voice-router-internal-call-disconnect-ca.html"],
+svc:["Unified Serviceability Admin Guide – Understanding Services","Cisco","cisco","https://www3-realm.cisco.com/en/US/docs/voice_ip_comm/cucm/service/8_0_2/admin/sasrvdes.pdf"],
+dp:["Configure Device Pools (region, CM group, date/time group)","VOSS Docs","ref","https://documentation.voss-solutions.com/release_21.1/html/src/user/configure-device-pool.html"],
+wxdi:["Dedicated Instance system configuration (Unified CM Groups)","Webex Help (Cisco)","cisco","https://help.webex.com/article/2vpf1"],
+fgt:["LDAP enhancements in CUCM (feature group template)","Cisco Community","ref","https://community.cisco.com/t5/collaboration-voice-and-video/ldap-enhancements-in-cucm/ta-p/3164934"],
+tod:["How to configure time-of-day routing in CUCM","Cisco Community","ref","https://community.cisco.com/t5/collaboration-knowledge-base/how-to-configure-time-of-day-routing-in-communications-manager/ta-p/3115356"],
+hunt:["UCM time-of-day routing (hunt pilot / hunt list / line group)","Cisco Community","ref","https://community.cisco.com/t5/unified-communications-infrastructure/ucm-time-of-day-routing/m-p/4629051"],
+vmesh:["Webex Video Mesh","Cisco","cisco","https://www.cisco.com/go/video-mesh"],
+vmesh_aag:["Webex Video Mesh at-a-glance (cloud overflow)","Cisco","cisco","https://bxin.cisco.com/c/dam/assets/video-mesh-aag-cm-5494.pdf"],
+bw_ds:["Webex with Service Providers data sheet (spaces)","Cisco","cisco","https://cisco.com/c/en/us/products/collateral/unified-communications/webex-broadworks/datasheet-c78-743959.html"],
+wxroute:["Comparison of call routing methods (AA / Queue / Hunt Group)","Webex Help (Cisco)","cisco","https://help.webex.com/article/upg0eu"],
+wxmig:["Design to migrate from Unified CM to Webex Calling (feature list)","Webex Help (Cisco)","cisco","https://help.webex.com/en-us/article/nqojzwt"],
+wxdev:["Configure and manage Webex Calling devices","Webex Help (Cisco)","cisco","https://help.webex.com/en-us/article/n9r1aac"],
+wxws:["Add shared devices and services to a workspace","Webex Help (Cisco)","cisco","https://help.webex.com/en-us/article/1mqb9cb/Add-Shared-Devices-and-Services-to-a-Workspace"],
+room:["Project Workplace – best practices for video rooms","Cisco","cisco","https://www.cisco.com/c/dam/m/zh_cn/projectworkplace/assets/pdf/best-practice.pdf"],
+ix:["TelePresence IX5000 room requirements","Cisco","cisco","https://www.cisco.com/c/en/us/td/docs/telepresence/ix5000/recommendations/ix5000_room_requirements.html"],
+aec:["AEC basics","Biamp","ref","https://support.biamp.com/Audia-Nexia/Miscellaneous/AEC_in_Audia_and_Nexia"],
+cardioid:["Speakerphone patent (cardioid null at rear)","Google Patents","ref","https://www.google.ch/patents/US20060093128"],
+chroma:["Chroma subsampling","FFmpeg Wiki","ref","https://fftrac-bg.ffmpeg.org/wiki/Chroma%20Subsampling"],
+ycbcr:["4K video quality overview (YCbCr, luma vs chroma)","BrightSign","ref","https://brightsign.atlassian.net/wiki/spaces/DOC/pages/370673602"],
+frames:["Video compression picture types (I/P/B)","Wikipedia","ref","https://www.wikipedia.com/wiki/P-frame"],
+h264:["H.264 compression explained (1080p = 1920×1080)","braindetox","ref","https://braindetox.kr/en/posts/h264_video_compression_explained.html"],
+prog:["Video fundamentals deck ('p' = progressive)","Google Slides (public)","ref","https://docs.google.com/presentation/d/17Z31kEkl_NGJ0M66reqr9_uTG6tI5EDDVXpdPKVuIrs/htmlpresent"],
+sx80:["Cisco SX80 Codec Data Sheet","Cisco","cisco","https://www.cisco.com/c/en/us/products/collateral/collaboration-endpoints/telepresence-quick-set-series/datasheet-c78-731242.html"],
+mx:["Cisco MX700 and MX800 Data Sheet","Cisco","cisco","https://www.cisco.com/c/en/us/products/collateral/collaboration-endpoints/telepresence-mx-series/datasheet-c78-731263.html"],
+deskpro:["Cisco Desk Pro Data Sheet","Cisco","cisco","https://www.cisco.com/c/en/us/products/collaboration-endpoints/webex-desk-pro/datasheet-c78-743105.html"],
+dx80:["Cisco brings innovation to rooms & desks (DX80, RoomOS)","No Jitter","ref","https://www.nojitter.com/workspace/cisco-brings-innovation-to-rooms-desks-with-latest-devices"],
+cms:["Cisco Meeting Server Data Sheet","Cisco","cisco","https://www.cisco.com/c/en/us/products/collateral/conferencing/meeting-server/datasheet-c78-737519.html"],
+gk_unity:["Cisco unified collaboration infrastructure overview","Global Knowledge","prep","https://www.globalknowledge.com/en-us/resources/resource-library/white-paper-2/cisco-unified-collaboration-solutions-infrastructure-overview"],
+pa:["Cisco Preferred Architecture use-case tool","Cisco","cisco","https://www.cisco.com/c/dam/assets/sol/coll/use_case_tool/usecase.html"],
+expwy_reg:["Configure endpoint SIP registration on Expressway (221630)","Cisco","cisco","https://www.cisco.com/c/en/us/support/docs/collaboration-endpoints/telepresence-system-ex-series/221630-configure-telepresence-endpoint-sip-regi.html"],
+vcs_reg:["VCS Admin Guide – Registration restriction policy","Cisco (manual mirror)","cisco","https://Manualslib.com/manual/839671/Cisco-Telepresence.html?page=89"],
+ce_api:["MX700/MX800 API Reference (DefaultCall Rate, Encryption, FarEndControl)","Cisco (manual mirror)","cisco","https://www.manualslib.com/manual/1362698/Cisco-Mx700.html?page=58"],
+ce_aa:["SX80 API Reference – AutoAnswer Mode","Cisco (manual mirror)","cisco","https://manualslib.com/manual/1298704/Cisco-Telepresence-Sx80.html?page=40"],
+ce_ok:["EX Series Admin Guide – Encryption option key","Cisco (manual mirror)","cisco","https://www.manualslib.com/manual/950020/Cisco-Ex60.html?page=64"],
+ce_bk:["MX700 Admin Guide – Backup and restore custom elements","Cisco (manual mirror)","cisco","https://mans.io/files/viewer/2613373/99"],
+videodg:["Video & TelePresence Design Guide – Protocols (H.239, H.224 FECC)","Cisco","cisco","https://www3-realm.cisco.com/en/US/docs/voice_ip_comm/uc_system/design/guides/videodg/protocls.pdf"],
+mcu_bfcp:["MCU and BFCP (H.239 for H.323, BFCP for SIP)","Cisco Community","ref","https://community.cisco.com/t5/telepresence-and-video/mcu-and-bfcp/m-p/1967115"]
+};
+
+// Per-chapter verification: one entry per question, in bank order: [ [sourceIds...], status ]
+// status "v" = a source directly states the answer; "c" = concept aligned to the chapter topic, no single source states it word-for-word
+const VER = {
+1:[[["bw"],"v"],[["vchist"],"v"],[["h323wiki"],"v"],[["toc"],"c"],[["imp_srnd"],"v"],[["toc"],"c"]],
+2:[[["oep_codec"],"v"],[["oep_codec"],"v"],[["oep_codec","bw"],"v"],[["oep_codec","cbt_bw"],"v"],[["oep_codec"],"v"],[["toc"],"c"],[["oep_codec"],"v"]],
+3:[[["toc"],"c"],[["ycbcr","chroma"],"v"],[["frames"],"v"],[["oep_codec"],"v"],[["h264"],"v"],[["prog"],"v"],[["toc"],"c"]],
+4:[[["aec"],"v"],[["ix"],"v"],[["room"],"v"],[["room"],"c"],[["room"],"c"],[["cardioid"],"v"]],
+5:[[["pri"],"v"],[["h323ports"],"v"],[["h323wiki"],"v"],[["oep_net"],"v"],[["oep_sip"],"v"],[["oep_sip"],"c"],[["h323ports"],"v"]],
+6:[[["pa"],"c"],[["gk_unity"],"v"],[["oep_edge"],"v"],[["imp_srnd"],"v"],[["cms"],"v"],[["srnd_cluster"],"v"]],
+7:[[["oep_net"],"v"],[["p8800","ds8865"],"v"],[["p8800"],"c"],[["toc"],"c"],[["oep_ep"],"v"],[["oep_ep"],"v"]],
+8:[[["wxblog"],"v"],[["sx80"],"v"],[["dx80"],"v"],[["mx"],"v"],[["deskpro"],"v"],[["ex_fr","ce_api"],"v"]],
+9:[[["oep_ep"],"v"],[["oep_ep"],"v"],[["h323ports"],"v"],[["expwy_reg"],"v"],[["vcs_reg"],"v"],[["cp_expwy"],"v"]],
+10:[[["mcu_bfcp"],"v"],[["videodg","mcu_bfcp"],"v"],[["ce_api"],"v"],[["ce_aa"],"v"],[["ce_api"],"c"],[["ce_api"],"v"]],
+11:[[["oep_ep"],"c"],[["roomos_rn"],"v"],[["ce_bk"],"v"],[["ex_fr"],"v"],[["toc"],"c"],[["ce_ok"],"v"]],
+12:[[["oep_ep"],"v"],[["oep_ep"],"v"],[["qos_wp","oep_imp"],"v"],[["qos_wp","oep_imp"],"v"],[["vowlan"],"v"],[["pri"],"c"]],
+13:[[["cvtqos"],"v"],[["cvtqos"],"v"],[["cvtqos","oep_qos"],"v"],[["oep_qos"],"v"],[["oep_llq"],"v"],[["oep_qos"],"v"],[["oep_llq"],"v"]],
+14:[[["oep_net"],"v"],[["snmp_cbt"],"v"],[["snmp_cbt"],"v"],[["oep_net"],"v"],[["oep_net"],"c"],[["toc"],"c"]],
+15:[[["lc_svc","svc"],"v"],[["toc"],"c"],[["dp"],"v"],[["dp"],"v"],[["dp","wxdi"],"v"],[["svc","lc_svc"],"v"]],
+16:[[["oep_ldap"],"v"],[["oep_ldap"],"v"],[["oep_ldap","oep_net"],"v"],[["oep_net"],"v"],[["oep_ldap"],"v"],[["fgt"],"v"]],
+17:[[["oep_ep"],"v"],[["dcloud","oep_ep"],"v"],[["oep_ep"],"v"],[["oep_ep"],"v"],[["dcloud","oep_ep"],"v"],[["dcloud"],"v"]],
+18:[[["oep_cac"],"v"],[["oep_css"],"v"],[["oep_css","css_comm"],"v"],[["hunt"],"v"],[["tod"],"v"],[["oep_cac"],"v"],[["toc"],"c"]],
+19:[[["lrg","cp_ch19"],"v"],[["oep_rp"],"v"],[["lrg"],"v"],[["oep_rp","wild"],"v"],[["oep_rp"],"v"],[["lrg"],"v"],[["cp_ch19","oep_rp","wild"],"v"]],
+20:[[["oep_edge"],"v"],[["oep_edge"],"v"],[["oep_edge"],"c"],[["cube_sip"],"v"],[["dp211306"],"c"],[["oep_edge"],"v"]],
+21:[[["mra_tn","oep_edge"],"v"],[["oep_edge"],"v"],[["mra_tn"],"c"],[["mra_tn"],"c"],[["mra_tn"],"c"],[["oep_edge","mra_ports"],"v"],[["mra_tn"],"c"]],
+22:[[["wxmig"],"c"],[["bw_ds"],"v"],[["vmesh"],"v"],[["toc"],"c"],[["oep_dir"],"c"],[["vmesh_aag"],"v"]],
+23:[[["oep_dir"],"v"],[["oep_dir"],"v"],[["oep_dir"],"v"],[["oep_dir"],"v"],[["wxdev"],"v"],[["wxws"],"v"]],
+24:[[["oep_pstn"],"v"],[["oep_pstn"],"v"],[["oep_pstn"],"v"],[["oep_lgw"],"v"],[["lgw"],"v"],[["brk2812"],"v"]],
+25:[[["wxroute"],"v"],[["wxroute"],"v"],[["toc"],"c"],[["wxmig"],"c"],[["wxmig"],"c"],[["wxmig"],"c"]],
+26:[[["oep_lgw"],"v"],[["lgw","oep_lgw"],"v"],[["oep_lgw","lgw"],"v"],[["lgw","oep_lgw"],"v"],[["lgw"],"c"],[["lgw","oep_lgw"],"v"]],
+27:[[["oep_cuc_int"],"v"],[["oep_cuc_int"],"v"],[["oep_cuc_ch"],"v"],[["oep_cuc_ch"],"v"],[["oep_cuc_cos"],"v"],[["oep_cuc_cos"],"v"]],
+28:[[["oep_cuc_cos"],"v"],[["oep_cuc_cos"],"v"],[["cuc_tr"],"v"],[["cuc_greet","oep_cuc_ch"],"v"],[["oep_cuc_ch"],"v"],[["oep_cuc_cos"],"v"]],
+29:[[["wxapp"],"v"],[["wxapp"],"v"],[["oep_net"],"v"],[["wxapp","wxapp_auto"],"v"],[["wxapp"],"c"],[["wxapp","wxapp_auto"],"v"]],
+30:[[["prt"],"v"],[["prt"],"v"],[["toc"],"c"],[["oneway","oneway2"],"v"],[["oneway2"],"c"],[["jabberprt"],"v"]],
+31:[[["oep_dna"],"v"],[["car_lc"],"v"],[["cdr","car_lc"],"v"],[["cmr","cdr"],"v"],[["cause"],"v"],[["cdr"],"c"]],
+32:[[["rtmt_comm"],"v"],[["rtmt_tlc"],"v"],[["rtmt_st"],"v"],[["rtmt_alert"],"v"],[["rtmt_st"],"c"],[["rtmt_inst"],"v"]],
+33:[[["oep_dr"],"v"],[["oep_dr"],"v"],[["oep_dr"],"v"],[["drs_cli"],"c"],[["oep_dr"],"v"],[["drs_cli"],"v"]],
+34:[[["cuc_rpt"],"v"],[["cuc_harv"],"v"],[["cuc_rpt9"],"v"],[["cuc_rpt"],"v"],[["cuc_rpt"],"c"],[["cuc_rpt"],"c"]]
+};
+
+const CHANGES = [
+"Ch. 16 — replaced the 'synced fields are read-only' question (no source found stating it) with one on what LDAP sync does not import (passwords), which OpenExamPrep and Cisco docs both confirm.",
+"Ch. 17 — corrected the setting name to 'Require Activation Code for Onboarding', the label Cisco dCloud and OpenExamPrep both use.",
+"Ch. 22 — replaced the 'Webex Calling is built on BroadWorks' question (couldn't confirm it from an official source) with a Video Mesh cloud-overflow question taken from Cisco's Video Mesh documentation."
+];
+
+const $=s=>document.querySelector(s);
+const LET=["A","B","C","D"];
+let current=[], submitted=false;
+
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const total=BANK.reduce((s,c)=>s+c.qs.length,0);
+
+(function fill(){
+  const sel=$("#chap");
+  const all=document.createElement("option");all.value="all";all.textContent=`All chapters — full exam (${total} questions)`;sel.appendChild(all);
+  const mix=document.createElement("option");mix.value="mix50";mix.textContent="All chapters — random 50";sel.appendChild(mix);
+  let part=null,grp;
+  BANK.forEach(c=>{
+    if(c.part!==part){part=c.part;grp=document.createElement("optgroup");grp.label=part;sel.appendChild(grp);}
+    const o=document.createElement("option");o.value=c.n;o.textContent=`Ch. ${c.n}: ${c.title} (${c.qs.length})`;grp.appendChild(o);
+  });
+  try{const last=localStorage.getItem("clcor-ch");if(last)sel.value=last;}catch(e){}
+})();
+
+let multi=false;
+function build(){
+  const v=$("#chap").value;
+  try{localStorage.setItem("clcor-ch",v);}catch(e){}
+  const list=(v==="all"||v==="mix50")?BANK.map(c=>c.n):[+v];
+  run(list, v==="mix50" ? 50 : 0, null);
+}
+function buildFrom(chList){ run(chList, 0, "Weak-chapter drill: Ch. "+chList.join(", ")); }
+let drillLabel=null;
+function run(chList, sample, label){
+  drillLabel=label;
+  let qs=[];
+  BANK.forEach(c=>{ if(chList.includes(c.n)) c.qs.forEach((q,qi)=>qs.push({ch:c.n,chTitle:c.title,q,ver:(VER[c.n]||[])[qi]||[["toc"],"c"]})); });
+  multi=chList.length>1;
+  if(sample) qs=shuffle(qs).slice(0,sample);
+  else if($("#shuffle").checked || label) qs=shuffle(qs);
+  current=qs.map(item=>{
+    const [text,right,...rest]=item.q; const expl=rest.pop();
+    const opts=shuffle([{t:right,ok:true},...rest.map(t=>({t,ok:false}))]);
+    return {...item,text,opts,expl,correct:opts.findIndex(o=>o.ok)};
+  });
+  submitted=false;
+  $("#results").style.display="none";
+  render();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function render(){
+    const quiz=$("#quiz"); quiz.innerHTML="";
+  current.forEach((it,i)=>{
+    const d=document.createElement("div"); d.className="q"; d.id="q"+i;
+    d.innerHTML=`<div class="qhead"><div class="qnum">${i+1}.</div><div class="qtext">${it.text}${multi?`<div class="qtag">Chapter ${it.ch}: ${it.chTitle}</div>`:""}</div></div>
+      <div class="opts">${it.opts.map((o,k)=>`<label class="opt" data-k="${k}"><input type="radio" name="r${i}" value="${k}"><span class="L">${LET[k]}.</span><span>${o.t}</span></label>`).join("")}</div>
+      <div class="qfoot"><button class="toggle" data-i="${i}">Show answer</button><span class="verdict"></span></div>
+      <div class="answer"><b>Answer: ${LET[it.correct]}</b> — ${it.opts[it.correct].t}<br><span style="color:var(--muted)">${it.expl}</span>${srcLine(it.ver)}</div>`;
+    quiz.appendChild(d);
+  });
+  quiz.querySelectorAll(".toggle").forEach(b=>b.onclick=()=>toggle(+b.dataset.i));
+  quiz.addEventListener("change",updateMeta);
+  $("#actions").style.display=current.length?"flex":"none";
+  $("#submit").disabled=false;
+  updateMeta();
+}
+
+const TYPE={cisco:"Cisco docs",prep:"Exam-prep site",ref:"Reference"};
+function srcLine(ver){
+  const [ids,st]=ver;
+  const badge=st==="v"?`<span class="badge b-v">Verified</span>`:`<span class="badge b-c">Concept</span>`;
+  const links=ids.map(id=>{const s=SRC[id];return s?`<a href="${s[3]}" target="_blank" rel="noopener">${s[1]} — ${s[0]}</a> <span class="t-${s[2]}">(${TYPE[s[2]]})</span>`:""}).join(" · ");
+  return `<div class="src">${badge}${st==="v"?"Verified against: ":"Topic reference: "}${links}</div>`;
+}
+(function verifyPanel(){
+  let v=0,c=0;const used={};
+  BANK.forEach(ch=>ch.qs.forEach((q,i)=>{const e=(VER[ch.n]||[])[i]||[["toc"],"c"];e[1]==="v"?v++:c++;e[0].forEach(id=>used[id]=(used[id]||0)+1);}));
+  const byType={cisco:0,prep:0,ref:0};Object.keys(used).forEach(id=>{if(SRC[id])byType[SRC[id][2]]+=used[id];});
+  const sites={};Object.keys(used).forEach(id=>{const s=SRC[id];if(!s)return;(sites[s[1]]=sites[s[1]]||[]).push(id);});
+  const order=Object.keys(sites).sort((a,b)=>sites[b].reduce((t,i)=>t+used[i],0)-sites[a].reduce((t,i)=>t+used[i],0));
+  $("#vbody").innerHTML=`
+   <div class="vgrid">
+     <div class="kv"><span class="pct-ok">Verified</span><br><b>${v}</b> of ${v+c} (${Math.round(v/(v+c)*100)}%)</div>
+     <div class="kv"><span class="pct-mid">Concept</span><br><b>${c}</b></div>
+     <div class="kv"><span class="t-cisco">Cisco doc citations</span><br><b>${byType.cisco}</b></div>
+     <div class="kv"><span class="t-prep">Exam-prep site citations</span><br><b>${byType.prep}</b></div>
+     <div class="kv">Other references<br><b>${byType.ref}</b></div>
+   </div>
+   <div class="kv"><b style="font-size:14px">Verified</b> means a cited page directly states the correct answer. <b style="font-size:14px">Concept</b> means the answer matches the chapter topic and standard Cisco behavior, but no single checked page states it in those words. Each question's source appears when you show its answer.</div>
+   <h4>Corrections made during verification</h4><ul>${CHANGES.map(x=>`<li>${x}</li>`).join("")}</ul>
+   <h4>Exam-prep sites used</h4><ul><li><b>OpenExamPrep</b>: free, independent 350-801 study guide (not affiliated with Cisco).</li><li><b>Cisco Press</b>: official CLCOR chapter excerpts, including the globalized call routing chapter's own quiz on the NANP wildcard.</li><li><b>CBT Nuggets</b>, <b>learncisco.net</b>, <b>Global Knowledge</b>: Cisco training providers.</li><li>Braindump sites (such as ExamTopics) were <b>not</b> used. They post leaked live-exam questions, which breaks Cisco's exam agreement, and their community answers are often wrong.</li></ul>
+   <h4>All sources (${Object.keys(used).length})</h4>
+   <div class="srclist">${order.map(site=>sites[site].map(id=>`<div><a href="${SRC[id][3]}" target="_blank" rel="noopener">${SRC[id][0]}</a> <span class="t-${SRC[id][2]}">— ${site}</span></div>`).join("")).join("")}</div>`;
+})();
+
+function toggle(i,force){
+  const box=document.querySelector(`#q${i} .answer`), btn=document.querySelector(`#q${i} .toggle`);
+  const show=force!==undefined?force:!box.classList.contains("show");
+  box.classList.toggle("show",show); btn.textContent=show?"Hide answer":"Show answer";
+}
+function updateMeta(){
+  const answered=current.filter((_,i)=>document.querySelector(`input[name=r${i}]:checked`)).length;
+  $("#meta").innerHTML=current.length?`<span>${drillLabel?drillLabel+" · ":""}${current.length} questions</span><span>${answered} answered</span>`:"";
+}
+
+function submit(){
+  if(submitted) return;
+  const unanswered=current.filter((_,i)=>!document.querySelector(`input[name=r${i}]:checked`)).length;
+  if(unanswered && !$("#submit").dataset.confirm){
+    $("#submit").dataset.confirm="1"; $("#submit").textContent=`${unanswered} unanswered — submit anyway?`; return;
+  }
+  delete $("#submit").dataset.confirm; $("#submit").textContent="Submit test";
+  submitted=true;
+  let right=0,wrong=0,skip=0; const byCh={};
+  current.forEach((it,i)=>{
+    const q=$("#q"+i); q.classList.add("locked");
+    const sel=document.querySelector(`input[name=r${i}]:checked`);
+    q.querySelectorAll("input").forEach(x=>x.disabled=true);
+    const pick=sel?+sel.value:-1, ok=pick===it.correct;
+    const v=q.querySelector(".verdict");
+    q.querySelector(`.opt[data-k="${it.correct}"]`).classList.add("is-right");
+    if(pick>-1 && !ok) q.querySelector(`.opt[data-k="${pick}"]`).classList.add("is-wrong");
+    if(ok){right++;q.classList.add("correct");v.className="verdict ok";v.textContent="✓ Correct";}
+    else if(pick<0){skip++;q.classList.add("incorrect");v.className="verdict bad";v.textContent="✗ Not answered — correct answer is "+LET[it.correct];}
+    else {wrong++;q.classList.add("incorrect");v.className="verdict bad";v.textContent="✗ Incorrect — correct answer is "+LET[it.correct];}
+    const c=byCh[it.ch]||(byCh[it.ch]={t:it.chTitle,r:0,n:0}); c.n++; if(ok)c.r++;
+  });
+  showResults(right,wrong,skip,byCh);
+}
+
+function cls(p){return p>=80?"pct-ok":p>=60?"pct-mid":"pct-bad";}
+function showResults(r,w,s,byCh){
+  const n=r+w+s, pct=n?Math.round(r/n*1000)/10:0, pctW=n?Math.round(w/n*1000)/10:0, pctS=n?Math.round(s/n*1000)/10:0;
+  const mark=+$("#passMark").value, passed=pct>=mark;
+  const chs=Object.keys(byCh);
+  const pc=(c)=>Math.round(c.r/c.n*1000)/10;
+  const ccls=(p)=>p>=mark?"pct-ok":p>=mark-15?"pct-mid":"pct-bad";
+  let tbl="",study="";
+  if(chs.length>1){
+    tbl=`<table><thead><tr><th>Chapter</th><th style="text-align:right">Correct</th><th style="text-align:right">Score</th><th style="text-align:right">Status</th></tr></thead><tbody>`+
+      chs.sort((a,b)=>a-b).map(k=>{const c=byCh[k],p=pc(c);return `<tr><td>Ch. ${k}: ${c.t}</td><td class="num">${c.r}/${c.n}</td><td class="num ${ccls(p)}">${p}%</td><td class="num ${p>=mark?"pct-ok":"pct-bad"}">${p>=mark?"Pass":"Study"}</td></tr>`;}).join("")+`</tbody></table>`;
+    const weak=chs.filter(k=>pc(byCh[k])<mark).sort((a,b)=>pc(byCh[a])-pc(byCh[b]));
+    study=weak.length
+      ? `<div class="study"><h3 class="pct-bad">Chapters to study (${weak.length})</h3><ol>${weak.map(k=>`<li>Ch. ${k}: ${byCh[k].t} <span class="${ccls(pc(byCh[k]))}">— ${pc(byCh[k])}% (${byCh[k].r}/${byCh[k].n})</span></li>`).join("")}</ol><button id="drillWeak">Practice these chapters now</button></div>`
+      : `<div class="study ok"><h3 class="pct-ok">No weak chapters</h3><div class="kv">Every chapter in this test met your ${mark}% pass mark.</div></div>`;
+  } else if(chs.length===1 && !passed){
+    const k=chs[0];
+    study=`<div class="study"><h3 class="pct-bad">Chapter to study</h3><ol><li>Ch. ${k}: ${byCh[k].t} — review it, then click Retake.</li></ol></div>`;
+  }
+  const R=$("#results");
+  R.innerHTML=`<h2>Results</h2>
+    <div class="verdict-big ${passed?"v-pass":"v-fail"}">${passed?"PASS":"FAIL"}</div>
+    <div class="score"><div class="big ${passed?"pct-ok":"pct-bad"}">${pct}%</div>
+      <div class="kv">Final score<br><b>${r} / ${n}</b></div>
+      <div class="kv">Pass mark<br><b>${mark}%</b></div>
+      <div class="kv"><span class="pct-ok">Correct</span><br><b>${r}</b> <span>(${pct}%)</span></div>
+      <div class="kv"><span class="pct-bad">Incorrect</span><br><b>${w}</b> <span>(${pctW}%)</span></div>
+      <div class="kv">Unanswered<br><b>${s}</b> <span>(${pctS}%)</span></div></div>
+    <div class="bar"><div class="g" style="width:${pct}%"></div><div class="r" style="width:${pctW}%"></div><div class="u" style="width:${pctS}%"></div></div>
+    <div class="kv">${passed?`You scored ${pct}%, which is at or above your ${mark}% pass mark.`:`You scored ${pct}%, ${Math.round((mark-pct)*10)/10} points below your ${mark}% pass mark.`}</div>${study}${tbl}`;
+  R.style.display="block";
+  const dw=$("#drillWeak");
+  if(dw) dw.onclick=()=>{const weak=[...R.querySelectorAll(".study li")].map(li=>+li.textContent.match(/Ch\. (\d+)/)[1]);buildFrom(weak);};
+  $("#submit").disabled=true;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+$("#start").onclick=build;
+$("#submit").onclick=submit;
+$("#reset").onclick=()=>{ if(drillLabel){ const l=[...new Set(current.map(c=>c.ch))]; buildFrom(l);} else build(); };
+$("#showAll").onclick=()=>{
+  const anyHidden=[...document.querySelectorAll(".answer")].some(a=>!a.classList.contains("show"));
+  current.forEach((_,i)=>toggle(i,anyHidden));
+  $("#showAll").textContent=anyHidden?"Hide all answers":"Show all answers";
+};
+
+/* ---- App shell: help, install, offline ---- */
+$("#helpBtn").onclick=()=>{const h=$("#help");h.open=!h.open;if(h.open)h.scrollIntoView({behavior:"smooth"});};
+let deferredPrompt=null;
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;$("#installBtn").style.display="inline-block";});
+$("#installBtn").onclick=async()=>{ if(!deferredPrompt){$("#help").open=true;$("#help").scrollIntoView({behavior:"smooth"});return;} deferredPrompt.prompt(); try{await deferredPrompt.userChoice;}catch(e){} deferredPrompt=null; $("#installBtn").style.display="none"; };
+const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent), standalone=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone;
+if(isIOS && !standalone){ const b=$("#installBtn"); b.style.display="inline-block"; b.textContent="Install on iPhone"; }
+function net(){ const n=$("#netStatus"); if(location.protocol==="file:"){n.textContent="● offline copy";return;} n.textContent=navigator.onLine?(standalone?"● installed app":"● online"):"● offline (cached)"; }
+window.addEventListener("online",net);window.addEventListener("offline",net);net();
+if(location.protocol==="file:"){ $("#dlLink").style.display="none"; }
+if("serviceWorker" in navigator && location.protocol.startsWith("http")){ navigator.serviceWorker.register("sw.js").catch(()=>{}); }
+</script>
+</body>
+</html>
